@@ -85,11 +85,11 @@ export function PrintController({
     <div className="no-print sticky top-0 z-10 mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-ink-200 bg-white p-3 shadow-card">
       <Button onClick={doPrint} loading={status === 'sending'}>
         <Printer className="size-4" />
-        {settings.mode === 'bridge' ? 'طباعة (إرسال للطابعة)' : 'طباعة'}
+        {settings.mode === 'bridge' ? 'طباعة مباشرة للطابعة' : 'طباعة من الهاتف'}
       </Button>
       {settings.mode === 'bridge' ? (
         <Button variant="outline" onClick={printBrowser}>
-          طباعة من المتصفح
+          طباعة من الهاتف / المتصفح
         </Button>
       ) : null}
       {pdfUrl ? (

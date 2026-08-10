@@ -13,7 +13,7 @@ export default async function PrintSalePage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ auto?: string; w?: string }>;
+  searchParams: Promise<{ auto?: string; w?: string; mode?: string }>;
 }) {
   await requireProfile();
   const { id } = await params;
@@ -24,7 +24,11 @@ export default async function PrintSalePage({
 
   const settings = await getSettings();
   const width = sp.w === '58' ? 58 : sp.w === '80' ? 80 : settings.printer.paper_width;
-  const printerSettings = { ...settings.printer, paper_width: width as 58 | 80 };
+  const printerSettings = {
+    ...settings.printer,
+    mode: sp.mode === 'browser' ? 'browser' as const : settings.printer.mode,
+    paper_width: width as 58 | 80,
+  };
   const doc = buildSaleReceipt(sale, settings.business);
 
   return (

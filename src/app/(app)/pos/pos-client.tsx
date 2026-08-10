@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Camera, ChevronDown, Minus, PauseCircle, Plus, Printer, ReceiptText,
-  ShoppingCart, Trash2, TriangleAlert, UserPlus, UserRound, X,
+  ShoppingCart, Smartphone, Trash2, TriangleAlert, UserPlus, UserRound, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NumericInput } from '@/components/ui/input';
@@ -651,13 +651,20 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                 <p className="mt-1 text-sm font-bold text-emerald-700">مدفوعة بالكامل</p>
               )}
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 variant="secondary"
                 onClick={() => window.open(`/print/sale/${result.id}?w=${printerWidth}&auto=1`, '_blank', 'noopener,width=450,height=650')}
               >
                 <Printer className="size-4" />
-                طباعة
+                طباعة مباشرة
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => window.open(`/print/sale/${result.id}?w=${printerWidth}&auto=1&mode=browser`, '_blank', 'noopener,width=450,height=650')}
+              >
+                <Smartphone className="size-4" />
+                طباعة هاتف
               </Button>
               <InvoicePdfButton id={result.id} invoiceNo={result.invoice_no} label="PDF" variant="outline" />
               <Button variant="outline" onClick={() => router.push(`/sales/${result.id}`)}>

@@ -42,7 +42,8 @@ export default async function SaleDetailPage({ params }: { params: Promise<{ id:
                 الفواتير
               </Button>
             </Link>
-            <PrintButton kind="sale" id={sale.id} />
+            <PrintButton kind="sale" id={sale.id} label="طباعة مباشرة" />
+            <PrintButton kind="sale" id={sale.id} label="طباعة من الهاتف" query={{ mode: 'browser' }} />
             <InvoicePdfButton id={sale.id} invoiceNo={sale.invoice_no} />
             {sale.status === 'completed' ? (
               <Link href={`/returns/new?sale=${sale.id}`}>
