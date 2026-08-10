@@ -80,12 +80,14 @@ export function Field({
   return (
     <div className={cn('space-y-1.5', className)}>
       {label ? (
-        <label className="block text-sm font-bold text-ink-700">
-          {label}
-          {required ? <span className="text-red-500"> *</span> : null}
+        <label className="block space-y-1.5">
+          <span className="block text-sm font-bold text-ink-700">
+            {label}
+            {required ? <span className="text-red-500"> *</span> : null}
+          </span>
+          {children}
         </label>
-      ) : null}
-      {children}
+      ) : children}
       {error ? <p className="text-xs font-medium text-red-600">{error}</p> : hint ? <p className="text-xs text-ink-500">{hint}</p> : null}
     </div>
   );

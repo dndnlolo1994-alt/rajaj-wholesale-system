@@ -38,9 +38,9 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
   return (
     <div className="min-h-dvh lg:flex">
       {/* ===== الشريط الجانبي (شاشات كبيرة) ===== */}
-      <aside className="no-print fixed inset-y-0 right-0 z-40 hidden w-60 flex-col bg-primary-950 text-primary-100 lg:flex">
-        <div className="flex items-center gap-2.5 border-b border-white/10 px-4 py-4">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-primary-500/20 text-primary-300">
+      <aside className="no-print fixed inset-y-0 right-0 z-40 hidden w-56 flex-col overflow-hidden bg-primary-950 text-primary-100 shadow-2xl lg:flex">
+        <div className="relative flex items-center gap-2.5 border-b border-white/10 px-4 py-4">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-white/8 text-gold-100 shadow-inner ring-1 ring-white/10">
             <Store className="size-5" />
           </div>
           <div className="min-w-0">
@@ -48,7 +48,7 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
             <p className="truncate text-[11px] text-primary-300/80">إدارة التوزيع والجملة</p>
           </div>
         </div>
-        <nav className="flex-1 space-y-4 overflow-y-auto px-3 py-4">
+        <nav className="relative flex-1 space-y-4 overflow-y-auto px-3 py-4">
           {groups.map((group) => (
             <div key={group.title}>
               <p className="px-2 pb-1.5 text-[11px] font-bold uppercase tracking-wide text-primary-400/70">
@@ -64,8 +64,8 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
                       className={cn(
                         'flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-bold transition-colors',
                         active
-                          ? 'bg-primary-600/90 text-white shadow-sm'
-                          : 'text-primary-200/90 hover:bg-white/5 hover:text-white',
+                          ? 'bg-white/12 text-white shadow-lg ring-1 ring-white/10'
+                          : 'text-primary-200/90 hover:bg-white/7 hover:text-white',
                       )}
                     >
                       <item.icon className="size-[18px] shrink-0" />
@@ -82,9 +82,9 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
             </div>
           ))}
         </nav>
-        <div className="border-t border-white/10 p-3">
-          <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-500/30 text-sm font-extrabold text-white">
+        <div className="relative border-t border-white/10 p-3">
+          <div className="flex items-center gap-2.5 rounded-xl bg-white/5 px-2 py-2 ring-1 ring-white/5">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm font-extrabold text-white ring-1 ring-white/10">
               {profile.full_name.charAt(0)}
             </div>
             <div className="min-w-0 flex-1">
@@ -99,12 +99,12 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
       </aside>
 
       {/* ===== المحتوى ===== */}
-      <div className="flex min-h-dvh w-full flex-col lg:pr-60">
+      <div className="flex min-h-dvh w-full flex-col lg:pr-56">
         {/* الشريط العلوي */}
-        <header className="no-print sticky top-0 z-30 border-b border-ink-200 bg-white/90 backdrop-blur">
-          <div className="flex h-14 items-center gap-2 px-4">
+        <header className="no-print sticky top-0 z-30 border-b border-ink-200/80 bg-white/90 shadow-[0_1px_16px_-14px_rgba(5,42,36,.45)] backdrop-blur-xl">
+          <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
             <Link href="/" className="flex items-center gap-2 lg:hidden">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary-700 text-white">
+              <div className="flex size-9 items-center justify-center rounded-lg bg-primary-800 text-white shadow-card">
                 <Store className="size-4.5" />
               </div>
               <span className="text-sm font-extrabold text-ink-900">{businessName}</span>
@@ -112,7 +112,7 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
             <div className="flex-1" />
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex h-10 items-center gap-2 rounded-lg border border-ink-200 bg-ink-100/60 px-3 text-sm text-ink-500 transition-colors hover:border-ink-300 lg:w-72"
+              className="flex h-10 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3 text-sm text-ink-500 shadow-sm transition-all hover:border-primary-200 lg:w-80"
             >
               <Search className="size-4" />
               <span className="hidden lg:inline">بحث شامل — عميل، صنف، فاتورة، باركود</span>
@@ -136,11 +136,11 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-24 pt-4 lg:pb-8">{children}</main>
+        <main className="animate-pop mx-auto w-full max-w-7xl flex-1 px-4 pb-24 pt-4 lg:px-6 lg:pb-10 lg:pt-5">{children}</main>
       </div>
 
       {/* ===== شريط الجوال السفلي ===== */}
-      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-ink-200 bg-white pb-[env(safe-area-inset-bottom)] lg:hidden">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-white/80 bg-white/88 shadow-[0_-12px_32px_-24px_rgba(5,42,36,.5)] backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:hidden">
         <div className="grid grid-cols-5">
           {bottomItems.slice(0, 2).map((item) => (
             <BottomLink key={item.href} item={item} active={isActive(pathname, item.href)} />
@@ -150,7 +150,9 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
             <span
               className={cn(
                 'flex size-12 -translate-y-3 items-center justify-center rounded-2xl shadow-pop transition-transform active:scale-95',
-                isActive(pathname, '/pos') ? 'bg-primary-800 text-white' : 'bg-primary-700 text-white',
+                isActive(pathname, '/pos')
+                  ? 'bg-gradient-to-br from-primary-700 to-primary-950 text-white ring-2 ring-gold-300/50'
+                  : 'bg-gradient-to-br from-primary-600 to-primary-900 text-white ring-2 ring-white',
               )}
             >
               <ShoppingCart className="size-6" />

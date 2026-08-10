@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Camera, ChevronDown, Minus, PauseCircle, Plus, Printer, ReceiptText,
-  ShoppingCart, Trash2, TriangleAlert, UserRound, X,
+  ShoppingCart, Trash2, TriangleAlert, UserPlus, UserRound, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NumericInput } from '@/components/ui/input';
@@ -14,6 +14,7 @@ import { Money } from '@/components/ui/misc';
 import { useToast } from '@/components/ui/toast';
 import { ScannerDialog } from '@/components/barcode/scanner-dialog';
 import { CustomerPicker } from './customer-picker';
+import { CustomerFormDialog } from '../customers/customer-form';
 import { PaymentSheet } from './payment-sheet';
 import { computeInvoice } from '@/lib/calc/invoice';
 import { parseMoney, parseQty, formatJOD } from '@/lib/calc/money';
@@ -381,6 +382,15 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
               <X className="size-4" />
             </button>
           ) : null}
+          <CustomerFormDialog
+            onCreated={setCustomer}
+            trigger={
+              <Button variant="secondary" className="shrink-0" title="إضافة عميل جديد">
+                <UserPlus className="size-4" />
+                <span className="hidden sm:inline">عميل جديد</span>
+              </Button>
+            }
+          />
           <Button variant="outline" onClick={openHeldList} className="shrink-0" title="الفواتير المعلّقة">
             <PauseCircle className="size-4" />
             <span className="hidden sm:inline">المعلّقة</span>

@@ -33,7 +33,7 @@ export function parseMoney(input: string | number | null | undefined): number | 
   const normalized = input
     .trim()
     .replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
-    .replace(/[،,]/g, '.')
+    .replace(/[،,٫]/g, '.')
     .replace(/\s/g, '');
   if (normalized === '' || normalized === '.' || normalized === '-') return null;
   const n = Number(normalized);

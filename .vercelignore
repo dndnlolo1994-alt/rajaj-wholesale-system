@@ -1,0 +1,21 @@
+.git
+.github
+.next
+node_modules
+coverage
+
+.env
+.env.*
+!.env.example
+
+/docs
+/scripts
+/supabase
+/tests
+/tools
+
+*.log
+*.tsbuildinfo
+supa git rajjj.txt
+AGENTS.md
+CLAUDE.md

@@ -19,6 +19,8 @@
 
 # production
 /build
+!/build/
+!/build/copy-pdf-fonts.mjs
 
 # misc
 .DS_Store
@@ -34,9 +36,17 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local backups
+/backups
+/tmp
+
 # vercel
 .vercel
+public/fonts/report-*.woff
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+.env*

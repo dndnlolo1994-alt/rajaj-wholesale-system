@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Cairo } from 'next/font/google';
 import { ToastProvider } from '@/components/ui/toast';
+import { PwaRegister } from '@/components/pwa-register';
 import './globals.css';
 
 const cairo = Cairo({
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <body className="min-h-dvh antialiased">
         <ToastProvider>{children}</ToastProvider>
+        <PwaRegister />
       </body>
     </html>
   );

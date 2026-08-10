@@ -8,7 +8,7 @@ import { loginAction } from './actions';
 
 export function LoginForm({ next, initialError }: { next?: string; initialError?: string }) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [loginName, setLoginName] = useState('almasri');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(initialError ?? null);
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const res = await loginAction({ email: email.trim(), password });
+    const res = await loginAction({ loginName: loginName.trim(), password });
     if (res.ok) {
       router.replace(next && next.startsWith('/') ? next : '/');
       router.refresh();
@@ -29,15 +29,15 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <Field label="البريد الإلكتروني" required>
+      <Field label="اسم المستخدم" required>
         <Input
-          type="email"
+          type="text"
           dir="ltr"
-          autoComplete="email"
+          autoComplete="username"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="name@example.com"
+          value={loginName}
+          onChange={(e) => setLoginName(e.target.value)}
+          placeholder="almasri"
           className="text-end"
         />
       </Field>

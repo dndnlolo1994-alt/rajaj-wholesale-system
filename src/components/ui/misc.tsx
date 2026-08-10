@@ -70,11 +70,11 @@ export function StatCard({
   href?: string;
 }) {
   const tones = {
-    default: 'bg-white',
-    success: 'bg-white',
-    danger: 'bg-white',
-    warning: 'bg-white',
-    info: 'bg-white',
+    default: 'border-primary-100/80 bg-gradient-to-br from-white to-primary-50/55',
+    success: 'border-emerald-100 bg-gradient-to-br from-white to-emerald-50/70',
+    danger: 'border-rose-100 bg-gradient-to-br from-white to-rose-50/65',
+    warning: 'border-amber-100 bg-gradient-to-br from-white to-amber-50/70',
+    info: 'border-sky-100 bg-gradient-to-br from-white to-sky-50/70',
   };
   const iconTones = {
     default: 'bg-primary-50 text-primary-700',
@@ -84,13 +84,13 @@ export function StatCard({
     info: 'bg-sky-50 text-sky-700',
   };
   const inner = (
-    <div className={cn('flex h-full items-start justify-between gap-2 rounded-[--radius-card] border border-ink-200 p-4 shadow-card transition-shadow', tones[tone], href && 'hover:shadow-pop')}>
+    <div className={cn('group relative flex h-full min-h-24 items-start justify-between gap-3 overflow-hidden rounded-[--radius-card] border p-3.5 shadow-card ring-1 ring-white transition-all', tones[tone], href && 'hover:-translate-y-0.5 hover:shadow-pop')}>
       <div className="min-w-0">
-        <p className="truncate text-xs font-bold text-ink-500">{title}</p>
-        <div className="mt-1.5 text-xl font-extrabold text-ink-900">{value}</div>
+        <p className="truncate text-xs font-extrabold text-ink-500">{title}</p>
+        <div className="mt-2 text-xl font-black tracking-tight text-ink-900">{value}</div>
         {sub ? <div className="mt-1 text-xs font-medium text-ink-500">{sub}</div> : null}
       </div>
-      {icon ? <div className={cn('shrink-0 rounded-xl p-2.5', iconTones[tone])}>{icon}</div> : null}
+      {icon ? <div className={cn('relative shrink-0 rounded-lg p-2 shadow-sm ring-1 ring-white/80 transition-transform group-hover:scale-105', iconTones[tone])}>{icon}</div> : null}
     </div>
   );
   return href ? <Link href={href} className="block h-full">{inner}</Link> : inner;
@@ -108,7 +108,7 @@ export function PageHeader({
   return (
     <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
       <div>
-        <h1 className="text-xl font-extrabold text-ink-900 lg:text-2xl">{title}</h1>
+        <h1 className="text-xl font-black tracking-tight text-ink-900 lg:text-2xl">{title}</h1>
         {description ? <p className="mt-0.5 text-sm text-ink-500">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
