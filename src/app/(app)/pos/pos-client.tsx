@@ -73,12 +73,14 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
   const [heldOpen, setHeldOpen] = useState(false);
   const [heldList, setHeldList] = useState<{ id: string; label: string | null; created_at: string; payload: HeldSalePayload }[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [resumePayAfterCustomer, setResumePayAfterCustomer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [overCredit, setOverCredit] = useState<{ payload: Parameters<typeof createSaleAction>[0]; message: string } | null>(null);
   const [result, setResult] = useState<SaleCreateResult | null>(null);
 
   const searchRef = useRef<HTMLInputElement>(null);
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumePayAfterCustomerRef = useRef(false);
 
   // ---------- البحث ----------
   const runSearch = useCallback(
@@ -273,6 +275,32 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
     });
   };
 
+  const selectCustomer = (nextCustomer: QuickCustomer | null) => {
+    const shouldResumePayment = resumePayAfterCustomerRef.current || resumePayAfterCustomer;
+    setCustomer(nextCustomer);
+    if (nextCustomer && shouldResumePayment && lines.length > 0) {
+      resumePayAfterCustomerRef.current = false;
+      setResumePayAfterCustomer(false);
+      setPickerOpen(false);
+      setPayOpen(true);
+    } else if (!nextCustomer) {
+      resumePayAfterCustomerRef.current = false;
+      setResumePayAfterCustomer(false);
+    }
+  };
+
+  const openCustomerPicker = () => {
+    resumePayAfterCustomerRef.current = false;
+    setResumePayAfterCustomer(false);
+    setPickerOpen(true);
+  };
+
+  const closeCustomerPicker = () => {
+    resumePayAfterCustomerRef.current = false;
+    setResumePayAfterCustomer(false);
+    setPickerOpen(false);
+  };
+
   const resetAll = () => {
     setLines([]);
     setInvoiceDiscount(0);
@@ -354,7 +382,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         {/* العميل + المعلّقة */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setPickerOpen(true)}
+            onClick={openCustomerPicker}
             className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl border border-ink-200 bg-white p-2.5 text-start shadow-card transition-colors hover:border-primary-300"
           >
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-800">
@@ -579,7 +607,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
       </Dialog>
 
       {/* ================= الحوارات ================= */}
-      <CustomerPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={setCustomer} />
+      <CustomerPicker open={pickerOpen} onClose={closeCustomerPicker} onSelect={selectCustomer} />
       <ScannerDialog open={scannerOpen} onClose={() => setScannerOpen(false)} onDetect={handleBarcode} continuous />
       <PaymentSheet
         open={payOpen}
@@ -589,6 +617,12 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         customerName={customer?.name ?? null}
         defaultMethod={defaultMethod}
         submitting={submitting}
+        onPickCustomer={() => {
+          setPayOpen(false);
+          resumePayAfterCustomerRef.current = true;
+          setResumePayAfterCustomer(true);
+          setPickerOpen(true);
+        }}
         onConfirm={completeSale}
       />
 

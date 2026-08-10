@@ -24,6 +24,7 @@ export function PaymentSheet({
   customerName,
   defaultMethod,
   submitting,
+  onPickCustomer,
   onConfirm,
 }: {
   open: boolean;
@@ -33,6 +34,7 @@ export function PaymentSheet({
   customerName: string | null;
   defaultMethod: PaymentMethod;
   submitting: boolean;
+  onPickCustomer?: () => void;
   onConfirm: (paid: number, method: PaymentMethod, notes: string) => void;
 }) {
   const [paidText, setPaidText] = useState('');
@@ -50,6 +52,7 @@ export function PaymentSheet({
   const paid = isCashCustomer ? total : (parseMoney(paidText) ?? 0);
   const remaining = round3(total - paid);
   const invalid = paid < 0 || paid > total;
+  const saveSuffix = remaining > 0 ? (paid <= 0 ? 'دين كامل' : 'آجل جزئي') : '';
 
   return (
     <Dialog
@@ -67,7 +70,7 @@ export function PaymentSheet({
             disabled={invalid}
             size="lg"
           >
-            حفظ الفاتورة {remaining > 0 ? '(آجل جزئي)' : ''}
+            حفظ الفاتورة {saveSuffix ? `(${saveSuffix})` : ''}
           </Button>
         </>
       }
@@ -79,9 +82,18 @@ export function PaymentSheet({
         </div>
 
         {isCashCustomer ? (
-          <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">
-            البيع النقدي بدون عميل مسجّل يُدفع بالكامل. لتسجيل دين اختر عميلًا.
-          </p>
+          <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-3">
+            <p className="text-sm font-extrabold text-amber-900">بيع سريع بدون اسم</p>
+            <p className="text-xs font-bold leading-5 text-amber-800">
+              الزبون النقدي مناسب للبيع السريع، ويُحفظ مدفوعًا بالكامل حتى لا تضيع الديون بدون اسم.
+              إذا بدك تسجّلها دين، اختَر أو أضف عميل أولًا.
+            </p>
+            {onPickCustomer ? (
+              <Button variant="secondary" className="w-full" onClick={onPickCustomer}>
+                اختيار عميل لتسجيل دين
+              </Button>
+            ) : null}
+          </div>
         ) : (
           <Field label="المبلغ المدفوع الآن" error={invalid ? 'المبلغ يجب أن يكون بين صفر والإجمالي' : null}>
             <NumericInput
@@ -90,19 +102,26 @@ export function PaymentSheet({
               value={paidText}
               onChange={(e) => setPaidText(e.target.value)}
             />
-            <div className="mt-2 flex gap-1.5">
-              <QuickBtn label="المبلغ كامل" onClick={() => setPaidText(String(total))} />
-              <QuickBtn label="النصف" onClick={() => setPaidText(String(round3(total / 2)))} />
-              <QuickBtn label="بدون دفعة (آجل)" onClick={() => setPaidText('0')} />
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <QuickBtn label="مدفوع كامل" onClick={() => setPaidText(String(total))} />
+              <QuickBtn label="نصف المبلغ" onClick={() => setPaidText(String(round3(total / 2)))} />
+              <QuickBtn label="دين كامل" onClick={() => setPaidText('0')} />
             </div>
           </Field>
         )}
 
         {!isCashCustomer ? (
-          <div className={`flex items-center justify-between rounded-xl border p-3 ${remaining > 0 ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
-            <span className="text-sm font-bold">{remaining > 0 ? 'يبقى على العميل' : 'مدفوعة بالكامل ✓'}</span>
+          <div className={`rounded-xl border p-3 ${remaining > 0 ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-bold">{remaining > 0 ? 'يبقى على العميل' : 'مدفوعة بالكامل ✓'}</span>
+              {remaining > 0 ? (
+                <span className="tnum text-lg font-extrabold text-amber-800" dir="ltr">{formatJOD(remaining)}</span>
+              ) : null}
+            </div>
             {remaining > 0 ? (
-              <span className="tnum text-lg font-extrabold text-amber-800" dir="ltr">{formatJOD(remaining)}</span>
+              <p className="mt-1 text-xs font-bold leading-5 text-amber-800">
+                سيظهر هذا المبلغ تلقائيًا في صفحة الديون ورصيد {customerName ?? 'العميل'} بعد حفظ الفاتورة.
+              </p>
             ) : null}
           </div>
         ) : null}
