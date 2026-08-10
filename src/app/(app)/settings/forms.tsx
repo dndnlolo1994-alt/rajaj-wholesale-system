@@ -289,6 +289,9 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
               <p className="mt-1 text-xs leading-5 text-ink-600">
                 للطابعات الحرارية Wi‑Fi/LAN: اختار «طابعة Wi‑Fi مباشرة»، اكتب IP الطابعة، اضغط فحص، ثم جرّب طباعة اختبار.
               </p>
+              <p className="mt-1 text-xs font-bold leading-5 text-primary-800">
+                على الهاتف: افتح النظام عادي، والطباعة المباشرة تمر عبر جهاز كاشير/كمبيوتر شغّال عليه مشغّل الطابعة بنفس الشبكة. أما PDF / إرسال فيعمل من الهاتف مباشرة.
+              </p>
             </div>
           </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
@@ -330,7 +333,7 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
                 <div>
                   <p className="text-sm font-extrabold text-primary-950">تشغيل سريع لبرنامج الطباعة</p>
                   <p className="mt-1 text-xs leading-5 text-ink-600">
-                    نزّل الملف على جهاز الكاشير وشغّله، واترك النافذة السوداء مفتوحة أثناء الطباعة.
+                    نزّل الملف على جهاز الكاشير أو أي كمبيوتر داخل المحل وشغّله، واترك النافذة السوداء مفتوحة. بعدها الهاتف يرسل أوامر الطباعة لهذا الجهاز.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
