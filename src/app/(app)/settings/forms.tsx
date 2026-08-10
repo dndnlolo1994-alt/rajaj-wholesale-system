@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DatabaseBackup, Download, Plus, Printer, ShieldCheck, UserPlus, Wifi, WifiOff } from 'lucide-react';
+import { CheckCircle2, DatabaseBackup, Download, Plus, Printer, Radio, Router, ShieldCheck, UserPlus, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Field, Input, NumericInput, Select } from '@/components/ui/input';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
@@ -269,6 +269,33 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
     <Card>
       <CardHeader title="إعدادات طابعة الفواتير الحرارية" />
       <CardBody className="space-y-4">
+        <div className="rounded-2xl border border-primary-100 bg-gradient-to-l from-primary-50 to-white p-4">
+          <div className="flex items-start gap-3">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary-800 text-white shadow-card">
+              <Wifi className="size-5" />
+            </span>
+            <div>
+              <p className="text-sm font-extrabold text-primary-950">ربط لاسلكي سهل وفخم</p>
+              <p className="mt-1 text-xs leading-5 text-ink-600">
+                للطابعات الحرارية Wi‑Fi/LAN: اختار «طابعة Wi‑Fi مباشرة»، اكتب IP الطابعة، اضغط فحص، ثم جرّب طباعة اختبار.
+              </p>
+            </div>
+          </div>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            {[
+              ['1', 'اختار طريقة الطباعة', 'متصفح عادي أو إرسال مباشر للطابعة'],
+              ['2', 'اكتب IP الطابعة', 'تجده من شاشة الطابعة أو الراوتر'],
+              ['3', 'افحص واطبع اختبار', 'إذا ظهرت ✓ تصبح جاهزة'],
+            ].map(([step, title, text]) => (
+              <div key={step} className="rounded-xl border border-white bg-white/80 p-3 shadow-sm">
+                <span className="mb-2 flex size-7 items-center justify-center rounded-full bg-gold-100 text-xs font-black text-primary-900">{step}</span>
+                <p className="text-xs font-extrabold text-ink-900">{title}</p>
+                <p className="mt-1 text-[11px] leading-4 text-ink-500">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <Field label="عرض الورق">
           <Segmented value={String(p.paper_width) as '58' | '80'}
             onChange={(v) => setP({ ...p, paper_width: Number(v) as 58 | 80 })}
@@ -279,19 +306,33 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
           <Segmented value={p.mode} onChange={(v) => setP({ ...p, mode: v })}
             options={[
               { value: 'browser', label: 'حوار المتصفح' },
-              { value: 'bridge', label: 'مباشرة عبر الجسر (صامتة)' },
+              { value: 'bridge', label: 'طابعة Wi‑Fi مباشرة' },
             ]} />
           <p className="mt-1.5 text-xs leading-5 text-ink-500">
-            «حوار المتصفح» يعمل فورًا مع أي طابعة معرّفة على الجهاز. «الطباعة المباشرة» تُرسل ESC/POS
-            للطابعة الشبكية Wi-Fi/LAN بدون حوار — تتطلب تشغيل جسر الطباعة المحلي (npm run print-bridge)
-            على جهاز في نفس الشبكة. التفاصيل في docs/PRINTING.md
+            «حوار المتصفح» يعمل فورًا مع أي طابعة مضافة على الجهاز. «طابعة Wi‑Fi مباشرة» ترسل الإيصال للطابعة بدون نافذة طباعة، بشرط تشغيل برنامج الطباعة المحلي على جهاز في نفس الشبكة.
           </p>
         </Field>
 
         {p.mode === 'bridge' ? (
-          <div className="space-y-4 rounded-xl border border-primary-200 bg-primary-50/50 p-3">
+          <div className="space-y-4 rounded-2xl border border-primary-200 bg-primary-50/50 p-3">
+            <div className="grid gap-2 sm:grid-cols-2">
+              <div className="flex items-start gap-2 rounded-xl bg-white p-3 ring-1 ring-primary-100">
+                <Router className="mt-0.5 size-5 text-primary-700" />
+                <div>
+                  <p className="text-xs font-extrabold text-ink-900">نفس الشبكة</p>
+                  <p className="mt-1 text-[11px] leading-4 text-ink-500">الجهاز والطابعة لازم يكونوا على نفس Wi‑Fi أو نفس الراوتر.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 rounded-xl bg-white p-3 ring-1 ring-primary-100">
+                <Radio className="mt-0.5 size-5 text-primary-700" />
+                <div>
+                  <p className="text-xs font-extrabold text-ink-900">منفذ الطابعة</p>
+                  <p className="mt-1 text-[11px] leading-4 text-ink-500">أغلب الطابعات الحرارية تستخدم Port 9100، خليه كما هو إلا إذا الطابعة مختلفة.</p>
+                </div>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="IP الطابعة" required>
+              <Field label="IP الطابعة" required hint="مثال: 192.168.1.100">
                 <Input dir="ltr" placeholder="192.168.1.100" value={p.printer_ip}
                   onChange={(e) => setP({ ...p, printer_ip: e.target.value.trim() })} />
               </Field>
@@ -300,7 +341,7 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
                   onChange={(e) => setP({ ...p, printer_port: parseQty(e.target.value) ?? 9100 })} />
               </Field>
             </div>
-            <Field label="عنوان جسر الطباعة" hint="الجهاز الذي يشغّل npm run print-bridge">
+            <Field label="رابط برنامج الطباعة المحلي" hint="اتركه كما هو إذا البرنامج يعمل على نفس الجهاز">
               <div className="flex gap-2">
                 <Input dir="ltr" value={p.bridge_url} onChange={(e) => setP({ ...p, bridge_url: e.target.value.trim() })} />
                 <Button variant="outline" onClick={testBridge} loading={bridgeStatus === 'checking'}>
@@ -308,8 +349,13 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
                   فحص
                 </Button>
               </div>
-              {bridgeStatus === 'online' ? <p className="mt-1 text-xs font-bold text-emerald-700">الجسر متصل ✓</p> : null}
-              {bridgeStatus === 'offline' ? <p className="mt-1 text-xs font-bold text-red-600">الجسر غير متاح — شغّله ثم أعد الفحص</p> : null}
+              {bridgeStatus === 'online' ? (
+                <p className="mt-1 flex items-center gap-1 text-xs font-bold text-emerald-700">
+                  <CheckCircle2 className="size-4" />
+                  برنامج الطباعة متصل ✓
+                </p>
+              ) : null}
+              {bridgeStatus === 'offline' ? <p className="mt-1 text-xs font-bold text-red-600">برنامج الطباعة غير متاح — شغّله ثم أعد الفحص</p> : null}
             </Field>
             <Field label="اسم الطابعة (للتوثيق)">
               <Input value={p.printer_name} onChange={(e) => setP({ ...p, printer_name: e.target.value })} />

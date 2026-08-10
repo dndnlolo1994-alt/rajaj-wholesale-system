@@ -11,6 +11,7 @@ import { StatusBadge, Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { VoidDialog } from '@/components/void-dialog';
 import { PrintButton } from '@/components/printing/print-button';
+import { InvoicePdfButton } from '@/components/printing/invoice-pdf-button';
 import { fmtDateTime } from '@/lib/format/date';
 import { unitLabel } from '@/lib/calc/units';
 import { formatPercent, marginPercent } from '@/lib/calc/money';
@@ -42,6 +43,7 @@ export default async function SaleDetailPage({ params }: { params: Promise<{ id:
               </Button>
             </Link>
             <PrintButton kind="sale" id={sale.id} />
+            <InvoicePdfButton id={sale.id} invoiceNo={sale.invoice_no} />
             {sale.status === 'completed' ? (
               <Link href={`/returns/new?sale=${sale.id}`}>
                 <Button variant="secondary">

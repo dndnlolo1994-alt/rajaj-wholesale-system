@@ -30,7 +30,7 @@ export default async function PrintSalePage({
   return (
     <div>
       <title>{doc.title}</title>
-      <PrintController blocks={doc.blocks} settings={printerSettings} auto={sp.auto === '1'} />
+      <PrintController blocks={doc.blocks} settings={printerSettings} auto={sp.auto === '1'} pdfUrl={`/api/sales/${sale.id}/pdf`} />
       <div className="rounded-lg bg-white p-3 shadow-card print:rounded-none print:p-0 print:shadow-none">
         <ReceiptView blocks={doc.blocks} width={width as 58 | 80} />
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Printer, RefreshCcw, X } from 'lucide-react';
+import { FileText, Printer, RefreshCcw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ReceiptBlock } from '@/lib/printing/receipt-model';
 import { renderReceiptToCanvas } from '@/lib/printing/receipt-canvas';
@@ -18,10 +18,12 @@ export function PrintController({
   blocks,
   settings,
   auto,
+  pdfUrl,
 }: {
   blocks: ReceiptBlock[];
   settings: PrinterSettings;
   auto: boolean;
+  pdfUrl?: string;
 }) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [message, setMessage] = useState<string | null>(null);
@@ -88,6 +90,12 @@ export function PrintController({
       {settings.mode === 'bridge' ? (
         <Button variant="outline" onClick={printBrowser}>
           طباعة من المتصفح
+        </Button>
+      ) : null}
+      {pdfUrl ? (
+        <Button variant="secondary" onClick={() => window.open(pdfUrl, '_blank', 'noopener,width=900,height=720')}>
+          <FileText className="size-4" />
+          PDF / إرسال
         </Button>
       ) : null}
       <Button variant="outline" onClick={() => (status === 'sent' || status === 'error' ? doPrint() : window.print())}>

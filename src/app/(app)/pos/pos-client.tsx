@@ -13,6 +13,7 @@ import { Segmented } from '@/components/ui/segmented';
 import { Money } from '@/components/ui/misc';
 import { useToast } from '@/components/ui/toast';
 import { ScannerDialog } from '@/components/barcode/scanner-dialog';
+import { InvoicePdfButton } from '@/components/printing/invoice-pdf-button';
 import { CustomerPicker } from './customer-picker';
 import { CustomerFormDialog } from '../customers/customer-form';
 import { PaymentSheet } from './payment-sheet';
@@ -650,7 +651,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                 <p className="mt-1 text-sm font-bold text-emerald-700">مدفوعة بالكامل</p>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <Button
                 variant="secondary"
                 onClick={() => window.open(`/print/sale/${result.id}?w=${printerWidth}&auto=1`, '_blank', 'noopener,width=450,height=650')}
@@ -658,6 +659,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                 <Printer className="size-4" />
                 طباعة
               </Button>
+              <InvoicePdfButton id={result.id} invoiceNo={result.invoice_no} label="PDF" variant="outline" />
               <Button variant="outline" onClick={() => router.push(`/sales/${result.id}`)}>
                 <ReceiptText className="size-4" />
                 عرض الفاتورة
