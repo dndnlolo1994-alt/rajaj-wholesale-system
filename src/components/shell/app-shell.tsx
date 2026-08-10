@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, LayoutGrid, LogOut, Search, ShoppingCart, Store, X } from 'lucide-react';
+import { Bell, LayoutGrid, LogOut, Search, ShoppingCart, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { DEFAULT_OWNER_PHOTO_URL } from '@/lib/settings-shared';
 import { navGroups, visibleGroups } from './nav-items';
 import { GlobalSearch } from './global-search';
 import type { UserRole } from '@/lib/types/db';
@@ -13,6 +14,7 @@ import { roleLabelsClient } from './role-labels';
 interface ShellProps {
   profile: { full_name: string; role: UserRole };
   businessName: string;
+  ownerPhotoUrl?: string | null;
   unreadCount: number;
   children: React.ReactNode;
 }
@@ -22,7 +24,22 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(href + '/');
 }
 
-export function AppShell({ profile, businessName, unreadCount, children }: ShellProps) {
+function avatarStyle(src?: string | null): CSSProperties {
+  const safeSrc = (src?.trim() || DEFAULT_OWNER_PHOTO_URL).replace(/"/g, '%22');
+  return { backgroundImage: `url("${safeSrc}")` };
+}
+
+function OwnerAvatar({ src, className }: { src?: string | null; className?: string }) {
+  return (
+    <span
+      aria-label="صورة رجائي المصري"
+      className={cn('block shrink-0 bg-cover bg-center shadow-inner ring-1 ring-white/20', className)}
+      style={avatarStyle(src)}
+    />
+  );
+}
+
+export function AppShell({ profile, businessName, ownerPhotoUrl, unreadCount, children }: ShellProps) {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -40,11 +57,9 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
       {/* ===== الشريط الجانبي (شاشات كبيرة) ===== */}
       <aside className="no-print fixed inset-y-0 right-0 z-40 hidden w-56 flex-col overflow-hidden bg-primary-950 text-primary-100 shadow-2xl lg:flex">
         <div className="relative flex items-center gap-2.5 border-b border-white/10 px-4 py-4">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-white/8 text-gold-100 shadow-inner ring-1 ring-white/10">
-            <Store className="size-5" />
-          </div>
+          <OwnerAvatar src={ownerPhotoUrl} className="size-11 rounded-xl ring-gold-300/40" />
           <div className="min-w-0">
-            <p className="truncate text-sm font-extrabold text-white">رجائي المصري</p>
+            <p className="truncate text-sm font-extrabold text-white">{businessName}</p>
             <p className="truncate text-[11px] text-primary-300/80">إدارة التوزيع والجملة</p>
           </div>
         </div>
@@ -84,9 +99,7 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
         </nav>
         <div className="relative border-t border-white/10 p-3">
           <div className="flex items-center gap-2.5 rounded-xl bg-white/5 px-2 py-2 ring-1 ring-white/5">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm font-extrabold text-white ring-1 ring-white/10">
-              {profile.full_name.charAt(0)}
-            </div>
+            <OwnerAvatar src={ownerPhotoUrl} className="size-8 rounded-lg" />
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs font-bold text-white">{profile.full_name}</p>
               <p className="text-[11px] text-primary-300/80">{roleLabelsClient[profile.role]}</p>
@@ -104,10 +117,8 @@ export function AppShell({ profile, businessName, unreadCount, children }: Shell
         <header className="no-print sticky top-0 z-30 border-b border-ink-200/80 bg-white/90 shadow-[0_1px_16px_-14px_rgba(5,42,36,.45)] backdrop-blur-xl">
           <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
             <Link href="/" className="flex items-center gap-2 lg:hidden">
-              <div className="flex size-9 items-center justify-center rounded-lg bg-primary-800 text-white shadow-card">
-                <Store className="size-4.5" />
-              </div>
-              <span className="text-sm font-extrabold text-ink-900">{businessName}</span>
+              <OwnerAvatar src={ownerPhotoUrl} className="size-9 rounded-lg ring-primary-100" />
+              <span className="max-w-[48vw] truncate text-sm font-extrabold text-ink-900">{businessName}</span>
             </Link>
             <div className="flex-1" />
             <button

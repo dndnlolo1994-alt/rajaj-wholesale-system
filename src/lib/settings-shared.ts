@@ -7,6 +7,7 @@ export interface BusinessSettings {
   phone: string;
   address: string;
   logo_url: string | null;
+  owner_photo_url: string | null;
   invoice_footer: string;
 }
 
@@ -38,6 +39,8 @@ export interface AppSettings {
   backup: { auto_enabled: boolean; retention_days: number };
 }
 
+export const DEFAULT_OWNER_PHOTO_URL = '/profile/rajaei-owner.jpg';
+
 export const DEFAULT_SETTINGS: AppSettings = {
   business: {
     owner_name: 'رجائي المصري',
@@ -45,6 +48,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     phone: '',
     address: '',
     logo_url: null,
+    owner_photo_url: DEFAULT_OWNER_PHOTO_URL,
     invoice_footer: 'شكرًا لتعاملكم معنا',
   },
   general: { timezone: 'Asia/Amman', currency_code: 'JOD', currency_symbol: 'د.أ', currency_decimals: 3 },

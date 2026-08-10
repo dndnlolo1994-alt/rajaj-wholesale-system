@@ -11,7 +11,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/toast';
 import { parseMoney, parseQty } from '@/lib/calc/money';
 import { checkBridge } from '@/lib/printing/escpos';
-import { paymentMethodLabels } from '@/lib/settings-shared';
+import { DEFAULT_OWNER_PHOTO_URL, paymentMethodLabels } from '@/lib/settings-shared';
 import type { AppSettings, PrinterSettings } from '@/lib/settings-shared';
 import type { PaymentMethod, Profile, UserRole } from '@/lib/types/db';
 import { roleLabelsClient } from '@/components/shell/role-labels';
@@ -35,11 +35,63 @@ function useSave() {
   return { save, saving };
 }
 
+function photoPreviewStyle(src?: string | null) {
+  const safeSrc = (src?.trim() || DEFAULT_OWNER_PHOTO_URL).replace(/"/g, '%22');
+  return { backgroundImage: `url("${safeSrc}")` };
+}
+
+async function resizeOwnerPhoto(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('اختار ملف صورة فقط');
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('حجم الصورة كبير. اختار صورة أقل من 5MB');
+  }
+
+  const src = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error('تعذر قراءة الصورة'));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('تعذر تجهيز الصورة'));
+    img.src = src;
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('المتصفح لم يستطع ضغط الصورة');
+
+  const size = Math.min(image.naturalWidth, image.naturalHeight);
+  const sourceX = Math.max(0, (image.naturalWidth - size) / 2);
+  const sourceY = Math.max(0, (image.naturalHeight - size) / 2);
+  context.drawImage(image, sourceX, sourceY, size, size, 0, 0, 512, 512);
+
+  return canvas.toDataURL('image/jpeg', 0.82);
+}
+
 // =====================================================================
 export function BusinessForm({ business, invoice }: { business: AppSettings['business']; invoice: AppSettings['invoice'] }) {
   const { save, saving } = useSave();
+  const { error } = useToast();
   const [b, setB] = useState(business);
   const [inv, setInv] = useState(invoice);
+
+  const handlePhotoChange = async (file?: File) => {
+    if (!file) return;
+    try {
+      const ownerPhotoUrl = await resizeOwnerPhoto(file);
+      setB({ ...b, owner_photo_url: ownerPhotoUrl });
+    } catch (e) {
+      error('لم يتم رفع الصورة', e instanceof Error ? e.message : 'جرب صورة ثانية');
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -52,6 +104,35 @@ export function BusinessForm({ business, invoice }: { business: AppSettings['bus
           <Field label="اسم صاحب النشاط" required>
             <Input value={b.owner_name} onChange={(e) => setB({ ...b, owner_name: e.target.value })} />
           </Field>
+          <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-3">
+            <div className="flex items-center gap-3">
+              <span
+                aria-label="معاينة صورة صاحب النشاط"
+                className="block size-16 shrink-0 rounded-2xl bg-cover bg-center shadow-card ring-2 ring-white"
+                style={photoPreviewStyle(b.owner_photo_url)}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-extrabold text-ink-900">صورة صاحب النشاط بجانب الاسم</p>
+                <p className="mt-1 text-xs leading-5 text-ink-500">تظهر في القائمة الجانبية وأعلى شاشة الجوال. ارفع صورة جديدة ثم اضغط حفظ.</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <label className="inline-flex h-9 cursor-pointer items-center justify-center rounded-lg bg-primary-800 px-3 text-xs font-extrabold text-white shadow-sm transition-colors hover:bg-primary-900">
+                    رفع / تغيير الصورة
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(event) => void handlePhotoChange(event.target.files?.[0])}
+                    />
+                  </label>
+                  {b.owner_photo_url && b.owner_photo_url !== DEFAULT_OWNER_PHOTO_URL ? (
+                    <Button variant="outline" size="sm" onClick={() => setB({ ...b, owner_photo_url: DEFAULT_OWNER_PHOTO_URL })}>
+                      استرجاع الصورة الأساسية
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <Field label="رقم الهاتف">
               <Input dir="ltr" className="text-end" value={b.phone} onChange={(e) => setB({ ...b, phone: e.target.value })} />

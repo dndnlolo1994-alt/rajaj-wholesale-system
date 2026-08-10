@@ -17,6 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <AppShell
       profile={{ full_name: profile.full_name, role: profile.role }}
       businessName={settings.business.owner_name}
+      ownerPhotoUrl={settings.business.owner_photo_url}
       unreadCount={count ?? 0}
     >
       {children}

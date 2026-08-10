@@ -18,6 +18,13 @@ const settingSchemas: Record<string, z.ZodType> = {
     phone: z.string().trim(),
     address: z.string().trim(),
     logo_url: z.string().nullable(),
+    owner_photo_url: z.string().trim().max(350_000).refine(
+      (value) =>
+        value.startsWith('/') ||
+        value.startsWith('https://') ||
+        /^data:image\/(jpeg|jpg|png|webp);base64,/i.test(value),
+      'مصدر الصورة غير صالح',
+    ).nullable(),
     invoice_footer: z.string().trim(),
   }),
   invoice: z.object({
