@@ -6,7 +6,7 @@
 insert into public.app_settings (key, value) values
   ('business', jsonb_build_object(
     'owner_name', 'رجائي المصري',
-    'business_name', 'مؤسسة رجائي المصري للتوزيع والجملة',
+    'business_name', 'رجائي المصري',
     'phone', '',
     'address', '',
     'logo_url', null,

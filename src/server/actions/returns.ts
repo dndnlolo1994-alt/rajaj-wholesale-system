@@ -29,7 +29,7 @@ export async function createReturnAction(input: ReturnInput): Promise<ActionResu
     if (error) return actionErr(error);
     revalidatePath('/returns');
     revalidatePath('/sales');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as ReturnCreateResult);
   } catch (e) {
     return actionErr(e);
@@ -51,7 +51,7 @@ export async function voidReturnAction(input: { id: string; reason: string }): P
     if (error) return actionErr(error);
     revalidatePath('/returns');
     revalidatePath('/sales');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as { return_no: string });
   } catch (e) {
     return actionErr(e);

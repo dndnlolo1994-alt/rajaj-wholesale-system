@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Dialog } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { NumericInput, Textarea, Field } from '@/components/ui/input';
+import { Input, NumericInput, Textarea, Field } from '@/components/ui/input';
 import { Segmented } from '@/components/ui/segmented';
 import { formatJOD, parseMoney, round3 } from '@/lib/calc/money';
 import type { PaymentMethod } from '@/lib/types/db';
@@ -24,6 +24,8 @@ export function PaymentSheet({
   customerName,
   defaultMethod,
   submitting,
+  cashCustomerName,
+  onCashCustomerNameChange,
   onPickCustomer,
   onConfirm,
 }: {
@@ -34,6 +36,8 @@ export function PaymentSheet({
   customerName: string | null;
   defaultMethod: PaymentMethod;
   submitting: boolean;
+  cashCustomerName: string;
+  onCashCustomerNameChange: (value: string) => void;
   onPickCustomer?: () => void;
   onConfirm: (paid: number, method: PaymentMethod, notes: string) => void;
 }) {
@@ -53,6 +57,7 @@ export function PaymentSheet({
   const remaining = round3(total - paid);
   const invalid = paid < 0 || paid > total;
   const saveSuffix = remaining > 0 ? (paid <= 0 ? 'دين كامل' : 'آجل جزئي') : '';
+  const displayCustomerName = (customerName ?? cashCustomerName.trim()) || 'زبون نقدي';
 
   return (
     <Dialog
@@ -77,37 +82,50 @@ export function PaymentSheet({
     >
       <div className="space-y-4">
         <div className="rounded-xl bg-primary-900 p-4 text-center text-white">
-          <p className="text-xs font-bold text-primary-300">الإجمالي المطلوب {customerName ? `— ${customerName}` : '— زبون نقدي'}</p>
+          <p className="text-xs font-bold text-primary-300">الإجمالي المطلوب — {displayCustomerName}</p>
           <p className="tnum mt-1 text-3xl font-extrabold" dir="ltr">{formatJOD(total)}</p>
         </div>
 
         {isCashCustomer ? (
-          <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-3">
-            <p className="text-sm font-extrabold text-amber-900">بيع سريع بدون اسم</p>
-            <p className="text-xs font-bold leading-5 text-amber-800">
-              الزبون النقدي مناسب للبيع السريع، ويُحفظ مدفوعًا بالكامل حتى لا تضيع الديون بدون اسم.
-              إذا بدك تسجّلها دين، اختَر أو أضف عميل أولًا.
-            </p>
-            {onPickCustomer ? (
-              <Button variant="secondary" className="w-full" onClick={onPickCustomer}>
-                اختيار عميل لتسجيل دين
-              </Button>
-            ) : null}
-          </div>
-        ) : (
-          <Field label="المبلغ المدفوع الآن" error={invalid ? 'المبلغ يجب أن يكون بين صفر والإجمالي' : null}>
-            <NumericInput
-              money
-              className="h-12 text-lg"
-              value={paidText}
-              onChange={(e) => setPaidText(e.target.value)}
-            />
-            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
-              <QuickBtn label="مدفوع كامل" onClick={() => setPaidText(String(total))} />
-              <QuickBtn label="نصف المبلغ" onClick={() => setPaidText(String(round3(total / 2)))} />
-              <QuickBtn label="دين كامل" onClick={() => setPaidText('0')} />
+          <>
+            <Field label="اسم العميل على الفاتورة (اختياري)" hint="للبيع السريع بدون فتح حساب عميل — يظهر في الفاتورة والطباعة فقط.">
+              <Input
+                value={cashCustomerName}
+                onChange={(e) => onCashCustomerNameChange(e.target.value)}
+                maxLength={150}
+                placeholder="مثال: أبو أحمد"
+              />
+            </Field>
+            <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-3">
+              <p className="text-sm font-extrabold text-amber-900">تفاصيل الدفع: مدفوع كامل</p>
+              <p className="text-xs font-bold leading-5 text-amber-800">
+                البيع السريع بدون حساب عميل يُحفظ مدفوعًا بالكامل. إذا بدك ذمم أو متبقي، اختَر أو أضف عميل أولًا.
+              </p>
+              {onPickCustomer ? (
+                <Button variant="secondary" className="w-full" onClick={onPickCustomer}>
+                  اختيار عميل لتسجيل ذمم أو متبقي
+                </Button>
+              ) : null}
             </div>
-          </Field>
+          </>
+        ) : (
+          <div className="space-y-3">
+            <Field label="تفاصيل الدفع" error={invalid ? 'المبلغ يجب أن يكون بين صفر والإجمالي' : null}>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <QuickBtn label="مدفوع كامل" onClick={() => setPaidText(String(total))} />
+                <QuickBtn label="ذمم بالكامل" onClick={() => setPaidText('0')} />
+                <QuickBtn label="دفعة + متبقي" onClick={() => setPaidText(String(round3(total / 2)))} />
+              </div>
+            </Field>
+            <Field label="المبلغ المدفوع الآن">
+              <NumericInput
+                money
+                className="h-12 text-lg"
+                value={paidText}
+                onChange={(e) => setPaidText(e.target.value)}
+              />
+            </Field>
+          </div>
         )}
 
         {!isCashCustomer ? (

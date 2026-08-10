@@ -50,7 +50,12 @@ export async function proxy(request: NextRequest) {
   }
 
   if (user && pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/pos', request.url));
+  }
+
+  // فتح البرنامج → شاشة البيع مباشرة (بدون تحميل صفحة وسيطة)
+  if (user && pathname === '/') {
+    return NextResponse.redirect(new URL('/pos', request.url));
   }
 
   return supabaseResponse;

@@ -80,7 +80,7 @@ export async function recordCustomerPaymentAction(
       p: { ...parsed.data, client_ip: await getClientIp() },
     });
     if (error) return actionErr(error);
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     revalidatePath('/customers');
     revalidatePath(`/customers/${parsed.data.customer_id}`);
     revalidatePath('/debts');

@@ -32,6 +32,7 @@ export const saleItemInputSchema = z.object({
 
 export const saleInputSchema = z.object({
   customer_id: uuid.nullable().optional(),
+  cash_customer_name: z.string().trim().max(150).nullable().optional(),
   sale_date: z.iso.datetime({ offset: true }).optional(),
   items: z.array(saleItemInputSchema).min(1, 'أضف صنفًا واحدًا على الأقل'),
   invoice_discount: money.default(0),

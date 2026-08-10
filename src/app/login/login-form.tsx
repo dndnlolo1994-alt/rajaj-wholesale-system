@@ -19,7 +19,7 @@ export function LoginForm({ next, initialError }: { next?: string; initialError?
     setLoading(true);
     const res = await loginAction({ loginName: loginName.trim(), password });
     if (res.ok) {
-      router.replace(next && next.startsWith('/') ? next : '/');
+      router.replace(next && next.startsWith('/') ? next : '/pos');
       router.refresh();
     } else {
       setError(res.error.message);

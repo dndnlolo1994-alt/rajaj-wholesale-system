@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Home, ShoppingCart, ReceiptText, RotateCcw, PackagePlus, Users, Building2,
+  LayoutGrid, ShoppingCart, ReceiptText, RotateCcw, PackagePlus, Users, Building2,
   HandCoins, Wallet, Coins, TrendingUp, CalendarDays, BarChart3, NotebookPen,
   Bell, ScrollText, DatabaseBackup, Settings, Boxes, ClipboardList,
 } from 'lucide-react';
@@ -22,8 +22,8 @@ export const navGroups: NavGroup[] = [
   {
     title: 'العمليات',
     items: [
-      { href: '/', label: 'الرئيسية', icon: Home },
       { href: '/pos', label: 'بيع جديد', icon: ShoppingCart, roles: ['owner', 'manager', 'sales'] },
+      { href: '/dashboard', label: 'لوحة القيادة', icon: LayoutGrid },
       { href: '/sales', label: 'الفواتير', icon: ReceiptText },
       { href: '/returns', label: 'المرتجعات', icon: RotateCcw },
       { href: '/purchases', label: 'المشتريات', icon: PackagePlus, roles: ['owner', 'manager', 'warehouse', 'accountant'] },

@@ -37,7 +37,7 @@ const SECTION_DEFS: Record<string, SectionDef> = {
   customers: { title: 'العملاء', columns: cols(['name', 'العميل'], ['shop_name', 'المحل'], ['phone', 'الهاتف'], ['area', 'المنطقة'], ['balance', 'الرصيد'], ['is_active', 'الحالة']) },
   suppliers: { title: 'الموردون', columns: cols(['name', 'المورد'], ['company_name', 'الشركة'], ['phone', 'الهاتف'], ['area', 'المنطقة'], ['balance', 'الرصيد'], ['is_active', 'الحالة']) },
   customer_prices: { title: 'الأسعار الخاصة للعملاء', columns: cols(['customer_id', 'العميل'], ['product_id', 'الصنف'], ['unit', 'الوحدة'], ['price', 'السعر'], ['updated_at', 'آخر تحديث']) },
-  sales: { title: 'فواتير المبيعات', columns: cols(['invoice_no', 'الفاتورة'], ['sale_date', 'التاريخ'], ['customer_id', 'العميل'], ['total', 'الإجمالي'], ['paid', 'المدفوع'], ['remaining', 'الباقي'], ['status', 'الحالة']) },
+  sales: { title: 'فواتير المبيعات', columns: cols(['invoice_no', 'الفاتورة'], ['sale_date', 'التاريخ'], ['customer_id', 'العميل'], ['cash_customer_name', 'اسم نقدي'], ['total', 'الإجمالي'], ['paid', 'المدفوع'], ['remaining', 'الباقي'], ['status', 'الحالة']) },
   sale_items: { title: 'تفاصيل أصناف المبيعات', columns: cols(['sale_id', 'الفاتورة'], ['product_name', 'الصنف'], ['unit', 'الوحدة'], ['qty', 'الكمية'], ['net_total', 'الصافي'], ['profit', 'الربح']) },
   held_sales: { title: 'المبيعات المعلقة', columns: cols(['label', 'الاسم'], ['customer_id', 'العميل'], ['created_by', 'المستخدم'], ['created_at', 'التاريخ']) },
   purchases: { title: 'فواتير المشتريات', columns: cols(['invoice_no', 'الفاتورة'], ['purchase_date', 'التاريخ'], ['supplier_id', 'المورد'], ['total', 'الإجمالي'], ['paid', 'المدفوع'], ['remaining', 'الباقي'], ['status', 'الحالة']) },

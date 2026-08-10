@@ -8,7 +8,7 @@
 -- create_sale: إتمام عملية بيع كاملة
 -- payload: {
 --   customer_id?, sale_date?, items: [{product_id, unit, qty, unit_price, discount?}],
---   invoice_discount?, paid, payment_method?, notes?, allow_over_credit?,
+--   invoice_discount?, paid, payment_method?, cash_customer_name?, notes?, allow_over_credit?,
 --   held_id?, client_ip?
 -- }
 -- ---------------------------------------------------------------------
@@ -54,6 +54,7 @@ declare
   v_sale_id uuid := gen_random_uuid();
   v_invoice_no text;
   v_method public.payment_method := nullif(p->>'payment_method','')::public.payment_method;
+  v_cash_customer_name text := nullif(left(trim(coalesce(p->>'cash_customer_name', '')), 150), '');
   v_notes text := nullif(p->>'notes', '');
   v_remaining_f bigint;
   v_new_balance numeric;
@@ -72,6 +73,7 @@ begin
   end if;
 
   if v_customer_id is not null then
+    v_cash_customer_name := null;
     select * into v_customer from public.customers where id = v_customer_id;
     if v_customer.id is null then
       perform app.err('CUSTOMER_NOT_FOUND', 'العميل غير موجود.');
@@ -207,9 +209,9 @@ begin
     v_cost_total_f := v_cost_total_f + a_cost_f[i];
   end loop;
 
-  insert into public.sales (id, invoice_no, customer_id, status, sale_date, subtotal, line_discount_total,
+  insert into public.sales (id, invoice_no, customer_id, cash_customer_name, status, sale_date, subtotal, line_discount_total,
     invoice_discount, total, paid, cost_total, profit, payment_method, notes, created_by)
-  values (v_sale_id, v_invoice_no, v_customer_id, 'completed', v_sale_date,
+  values (v_sale_id, v_invoice_no, v_customer_id, v_cash_customer_name, 'completed', v_sale_date,
     app.from_fils(v_subtotal_f), app.from_fils(v_linedisc_f), app.from_fils(v_invdisc_f),
     app.from_fils(v_total_f), app.from_fils(v_paid_f),
     app.from_fils(v_cost_total_f), app.from_fils(v_total_f - v_cost_total_f),

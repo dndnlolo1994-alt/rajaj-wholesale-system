@@ -16,6 +16,7 @@ coverage
 
 *.log
 *.tsbuildinfo
+.codex-local
 supa git rajjj.txt
 AGENTS.md
 CLAUDE.md

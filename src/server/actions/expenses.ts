@@ -25,7 +25,7 @@ export async function createExpenseAction(input: ExpenseInput): Promise<ActionRe
     if (error) return actionErr(error);
     revalidatePath('/expenses');
     revalidatePath('/cashbox');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as ExpenseCreateResult);
   } catch (e) {
     return actionErr(e);
@@ -47,7 +47,7 @@ export async function voidExpenseAction(input: { id: string; reason: string }): 
     if (error) return actionErr(error);
     revalidatePath('/expenses');
     revalidatePath('/cashbox');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as { expense_no: string });
   } catch (e) {
     return actionErr(e);

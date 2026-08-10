@@ -28,7 +28,7 @@ export async function createSaleAction(input: SaleInput): Promise<ActionResult<S
       p: { ...parsed.data, client_ip: await getClientIp() },
     });
     if (error) return actionErr(error);
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     revalidatePath('/sales');
     return actionOk(data as SaleCreateResult);
   } catch (e) {
@@ -50,7 +50,7 @@ export async function voidSaleAction(input: { id: string; reason: string }): Pro
     });
     if (error) return actionErr(error);
     revalidatePath('/sales');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as { invoice_no: string });
   } catch (e) {
     return actionErr(e);

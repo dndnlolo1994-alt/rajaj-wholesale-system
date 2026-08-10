@@ -70,6 +70,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
   const [pickerOpen, setPickerOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [payOpen, setPayOpen] = useState(false);
+  const [cashCustomerName, setCashCustomerName] = useState('');
   const [heldOpen, setHeldOpen] = useState(false);
   const [heldList, setHeldList] = useState<{ id: string; label: string | null; created_at: string; payload: HeldSalePayload }[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
@@ -260,6 +261,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
   const completeSale = (paid: number, method: PaymentMethod, notes: string) => {
     submitSale({
       customer_id: customer?.id ?? null,
+      cash_customer_name: customer ? null : (cashCustomerName.trim() || null),
       items: lines.map((l) => ({
         product_id: l.product_id,
         unit: l.unit,
@@ -305,6 +307,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
     setLines([]);
     setInvoiceDiscount(0);
     setCustomer(null);
+    setCashCustomerName('');
     setHeldId(null);
     setResult(null);
     setQ('');
@@ -617,6 +620,8 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         customerName={customer?.name ?? null}
         defaultMethod={defaultMethod}
         submitting={submitting}
+        cashCustomerName={cashCustomerName}
+        onCashCustomerNameChange={setCashCustomerName}
         onPickCustomer={() => {
           setPayOpen(false);
           resumePayAfterCustomerRef.current = true;

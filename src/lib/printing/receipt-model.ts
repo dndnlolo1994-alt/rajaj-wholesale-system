@@ -21,12 +21,15 @@ export interface ReceiptDoc {
 }
 
 const jod = (n: number | string) => formatJOD(Number(n), { symbol: false });
+const saleCustomerName = (sale: SaleFull) => sale.customer?.name ?? sale.cash_customer_name ?? 'زبون نقدي';
 
 export function businessHeader(business: BusinessSettings): ReceiptBlock[] {
   const blocks: ReceiptBlock[] = [
     { type: 'text', text: business.business_name, size: 'lg', bold: true, align: 'center' },
   ];
-  if (business.owner_name) blocks.push({ type: 'text', text: business.owner_name, size: 'sm', align: 'center' });
+  if (business.owner_name && business.owner_name.trim() !== business.business_name.trim()) {
+    blocks.push({ type: 'text', text: business.owner_name, size: 'sm', align: 'center' });
+  }
   if (business.phone) blocks.push({ type: 'text', text: `هاتف: ${business.phone}`, size: 'sm', align: 'center' });
   if (business.address) blocks.push({ type: 'text', text: business.address, size: 'sm', align: 'center' });
   blocks.push({ type: 'sep', style: 'solid' });
@@ -40,7 +43,7 @@ export function buildSaleReceipt(sale: SaleFull, business: BusinessSettings): Re
   blocks.push({ type: 'text', text: sale.status === 'void' ? 'فاتورة ملغاة' : 'فاتورة مبيعات', size: 'md', bold: true, align: 'center' });
   blocks.push({ type: 'kv', label: 'رقم الفاتورة', value: sale.invoice_no });
   blocks.push({ type: 'kv', label: 'التاريخ', value: `${fmtDateShort(sale.sale_date)} ${fmtTime(sale.sale_date)}` });
-  blocks.push({ type: 'kv', label: 'العميل', value: sale.customer?.name ?? 'زبون نقدي' });
+  blocks.push({ type: 'kv', label: 'العميل', value: saleCustomerName(sale) });
   if (sale.customer?.shop_name) blocks.push({ type: 'kv', label: 'المحل', value: sale.customer.shop_name });
   if (sale.customer?.phone) blocks.push({ type: 'kv', label: 'الهاتف', value: sale.customer.phone });
   blocks.push({ type: 'sep' });

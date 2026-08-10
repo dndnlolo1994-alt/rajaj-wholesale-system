@@ -24,7 +24,7 @@ export async function manualCashTxAction(input: CashManualInput): Promise<Action
     });
     if (error) return actionErr(error);
     revalidatePath('/cashbox');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as { ok: boolean });
   } catch (e) {
     return actionErr(e);
@@ -53,7 +53,7 @@ export async function closeCashSessionAction(input: CloseSessionInput): Promise<
     const { data, error } = await supabase.rpc('close_cash_session', { p: parsed.data });
     if (error) return actionErr(error);
     revalidatePath('/cashbox');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as CloseSessionResult);
   } catch (e) {
     return actionErr(e);

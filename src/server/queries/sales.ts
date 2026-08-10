@@ -27,7 +27,11 @@ export async function listSales(params: SaleListParams): Promise<{ rows: SaleLis
     .order('sale_date', { ascending: false })
     .order('created_at', { ascending: false });
 
-  if (params.q) query = query.ilike('invoice_no', `%${params.q}%`);
+  if (params.q) {
+    // القيمة بين علامتَي اقتباس حتى لا تكسر الفاصلة أو الأقواس صيغة الفلتر
+    const like = `"%${params.q.replace(/["\\]/g, '')}%"`;
+    query = query.or(`invoice_no.ilike.${like},cash_customer_name.ilike.${like}`);
+  }
   if (params.status && params.status !== 'all') query = query.eq('status', params.status);
   if (params.customerId) query = query.eq('customer_id', params.customerId);
   if (params.from) query = query.gte('sale_date', `${params.from}T00:00:00+03:00`);

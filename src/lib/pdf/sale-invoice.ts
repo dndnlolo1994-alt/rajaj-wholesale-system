@@ -69,7 +69,9 @@ function drawHeader(doc: PDFKit.PDFDocument, sale: SaleFull, business: BusinessS
   doc.circle(48, 138, 42).fill(GOLD);
 
   arabic(doc, business.business_name, 36, 34, pageW - 72, 19, '#ffffff', true, 'right');
-  arabic(doc, business.owner_name, 36, 64, pageW - 72, 10, '#d9f4ea', false, 'right');
+  if (business.owner_name && business.owner_name.trim() !== business.business_name.trim()) {
+    arabic(doc, business.owner_name, 36, 64, pageW - 72, 10, '#d9f4ea', false, 'right');
+  }
   if (business.phone || business.address) {
     arabic(doc, [business.phone ? `هاتف: ${business.phone}` : '', business.address].filter(Boolean).join(' — '), 36, 84, pageW - 72, 9, '#c8e6dc', false, 'right');
   }
@@ -80,7 +82,7 @@ function drawHeader(doc: PDFKit.PDFDocument, sale: SaleFull, business: BusinessS
 }
 
 function drawMeta(doc: PDFKit.PDFDocument, sale: SaleFull, y: number): number {
-  const customer = sale.customer?.name ?? 'زبون نقدي';
+  const customer = sale.customer?.name ?? sale.cash_customer_name ?? 'زبون نقدي';
   const shop = sale.customer?.shop_name ? ` — ${sale.customer.shop_name}` : '';
   const payment = sale.payment_method ? paymentMethodLabels[sale.payment_method] : '—';
   const cards = [

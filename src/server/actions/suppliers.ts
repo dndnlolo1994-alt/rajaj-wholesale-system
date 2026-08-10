@@ -78,7 +78,7 @@ export async function recordSupplierPaymentAction(
       p: { ...parsed.data, client_ip: await getClientIp() },
     });
     if (error) return actionErr(error);
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     revalidatePath('/suppliers');
     revalidatePath(`/suppliers/${parsed.data.supplier_id}`);
     revalidatePath('/debts');

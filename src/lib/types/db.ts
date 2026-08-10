@@ -108,6 +108,7 @@ export interface Sale {
   id: string;
   invoice_no: string;
   customer_id: string | null;
+  cash_customer_name: string | null;
   status: DocStatus;
   sale_date: string;
   subtotal: number;

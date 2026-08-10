@@ -33,7 +33,7 @@ export async function createPurchaseAction(input: PurchaseInput): Promise<Action
     });
     if (error) return actionErr(error);
     revalidatePath('/purchases');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as PurchaseCreateResult);
   } catch (e) {
     return actionErr(e);
@@ -54,7 +54,7 @@ export async function voidPurchaseAction(input: { id: string; reason: string }):
     });
     if (error) return actionErr(error);
     revalidatePath('/purchases');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as { invoice_no: string });
   } catch (e) {
     return actionErr(e);
@@ -134,7 +134,7 @@ export async function paySupplierForPurchaseAction(input: SupplierPaymentInput):
     });
     if (error) return actionErr(error);
     revalidatePath('/purchases');
-    revalidatePath('/');
+    revalidatePath('/dashboard');
     return actionOk(data as SupplierPaymentResult);
   } catch (e) {
     return actionErr(e);

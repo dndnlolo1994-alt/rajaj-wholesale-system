@@ -156,6 +156,7 @@ create table public.sales (
   id uuid primary key default gen_random_uuid(),
   invoice_no text not null unique,
   customer_id uuid references public.customers (id) on delete restrict,
+  cash_customer_name text,
   status public.doc_status not null default 'completed',
   sale_date timestamptz not null default now(),
   subtotal numeric(14,3) not null default 0 check (subtotal >= 0),

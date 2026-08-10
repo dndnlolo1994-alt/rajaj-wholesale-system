@@ -46,7 +46,7 @@ export function AppShell({ profile, businessName, ownerPhotoUrl, unreadCount, ch
   const groups = visibleGroups(profile.role);
 
   const bottomItems = [
-    { href: '/', label: 'الرئيسية' },
+    { href: '/sales', label: 'الفواتير' },
     { href: '/customers', label: 'العملاء' },
     { href: '/pos', label: 'بيع جديد', primary: true },
     { href: '/products', label: 'المخزون' },
@@ -116,7 +116,7 @@ export function AppShell({ profile, businessName, ownerPhotoUrl, unreadCount, ch
         {/* الشريط العلوي */}
         <header className="no-print sticky top-0 z-30 border-b border-ink-200/80 bg-white/90 shadow-[0_1px_16px_-14px_rgba(5,42,36,.45)] backdrop-blur-xl">
           <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-            <Link href="/" className="flex items-center gap-2 lg:hidden">
+            <Link href="/pos" className="flex items-center gap-2 lg:hidden">
               <OwnerAvatar src={ownerPhotoUrl} className="size-9 rounded-lg ring-primary-100" />
               <span className="max-w-[48vw] truncate text-sm font-extrabold text-ink-900">{businessName}</span>
             </Link>

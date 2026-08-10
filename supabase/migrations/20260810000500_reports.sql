@@ -149,7 +149,7 @@ begin
     'recent_sales', (
       select coalesce(jsonb_agg(t), '[]'::jsonb) from (
         select s.id, s.invoice_no, s.total, s.paid, s.status, s.sale_date,
-          coalesce(c.name, 'زبون نقدي') as customer_name
+          coalesce(c.name, s.cash_customer_name, 'زبون نقدي') as customer_name
         from public.sales s left join public.customers c on c.id = s.customer_id
         order by s.created_at desc limit 5
       ) t
@@ -715,9 +715,10 @@ begin
     'sales', (
       select coalesce(jsonb_agg(t), '[]'::jsonb) from (
         select s.id, s.invoice_no, s.total, s.status, s.sale_date,
-          coalesce(c.name, 'زبون نقدي') as customer_name
+          coalesce(c.name, s.cash_customer_name, 'زبون نقدي') as customer_name
         from public.sales s left join public.customers c on c.id = s.customer_id
         where s.invoice_no ilike v_like
+           or s.cash_customer_name ilike v_like
         order by s.sale_date desc limit p_limit
       ) t
     )

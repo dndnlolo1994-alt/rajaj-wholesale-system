@@ -93,7 +93,7 @@ export async function getReturnableSale(saleId: string): Promise<ReturnableSale 
 
   const { data, error } = await supabase
     .from('sales')
-    .select('id, invoice_no, sale_date, total, customer_id, status, customer:customers(name), items:sale_items(*)')
+    .select('id, invoice_no, sale_date, total, customer_id, cash_customer_name, status, customer:customers(name), items:sale_items(*)')
     .eq('id', saleId)
     .single();
   if (error || !data) return null;
@@ -104,6 +104,7 @@ export async function getReturnableSale(saleId: string): Promise<ReturnableSale 
     sale_date: string;
     total: number;
     customer_id: string | null;
+    cash_customer_name: string | null;
     status: string;
     customer: { name: string } | null;
     items: SaleItem[];
@@ -130,7 +131,7 @@ export async function getReturnableSale(saleId: string): Promise<ReturnableSale 
     sale: {
       id: sale.id,
       invoice_no: sale.invoice_no,
-      customer_name: sale.customer?.name ?? null,
+      customer_name: sale.customer?.name ?? sale.cash_customer_name ?? null,
       sale_date: sale.sale_date,
       total: Number(sale.total),
       customer_id: sale.customer_id,

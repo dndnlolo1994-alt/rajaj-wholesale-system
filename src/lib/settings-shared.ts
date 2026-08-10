@@ -44,7 +44,7 @@ export const DEFAULT_OWNER_PHOTO_URL = '/profile/rajaei-owner.jpg';
 export const DEFAULT_SETTINGS: AppSettings = {
   business: {
     owner_name: 'رجائي المصري',
-    business_name: 'مؤسسة رجائي المصري للتوزيع والجملة',
+    business_name: 'رجائي المصري',
     phone: '',
     address: '',
     logo_url: null,

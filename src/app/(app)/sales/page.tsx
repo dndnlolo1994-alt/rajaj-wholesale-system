@@ -31,6 +31,7 @@ export default async function SalesPage({
     to: params.to,
     page,
   });
+  const customerLabel = (sale: (typeof rows)[number]) => sale.customer?.name ?? sale.cash_customer_name ?? 'زبون نقدي';
 
   return (
     <div>
@@ -88,7 +89,7 @@ export default async function SalesPage({
                           {s.invoice_no}
                         </Link>
                       </td>
-                      <td className="px-4 py-3 font-bold">{s.customer?.name ?? 'زبون نقدي'}</td>
+                      <td className="px-4 py-3 font-bold">{customerLabel(s)}</td>
                       <td className="px-4 py-3 text-ink-500">
                         {fmtDateShort(s.sale_date)} — {fmtTime(s.sale_date)}
                       </td>
@@ -109,7 +110,7 @@ export default async function SalesPage({
               {rows.map((s) => (
                 <Link key={s.id} href={`/sales/${s.id}`} className="block p-3.5 transition-colors hover:bg-primary-50/40">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-extrabold">{s.customer?.name ?? 'زبون نقدي'}</p>
+                    <p className="text-sm font-extrabold">{customerLabel(s)}</p>
                     <Money value={s.total} />
                   </div>
                   <div className="mt-1 flex items-center justify-between gap-2 text-xs text-ink-500">

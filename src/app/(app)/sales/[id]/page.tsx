@@ -174,7 +174,10 @@ export default async function SaleDetailPage({ params }: { params: Promise<{ id:
                   </p>
                 </Link>
               ) : (
-                <p className="text-sm font-bold text-ink-500">زبون نقدي (بدون تسجيل)</p>
+                <div>
+                  <p className="text-base font-extrabold text-ink-800">{sale.cash_customer_name ?? 'زبون نقدي'}</p>
+                  <p className="mt-1 text-sm font-bold text-ink-500">بيع سريع بدون حساب عميل</p>
+                </div>
               )}
             </CardBody>
           </Card>
