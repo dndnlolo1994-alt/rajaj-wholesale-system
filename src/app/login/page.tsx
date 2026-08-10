@@ -1,4 +1,4 @@
-import { Store } from 'lucide-react';
+import Image from 'next/image';
 import { LoginForm } from './login-form';
 
 export const metadata = { title: 'تسجيل الدخول' };
@@ -14,8 +14,15 @@ export default async function LoginPage({
     <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-primary-950 via-primary-900 to-primary-950 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex size-16 items-center justify-center rounded-2xl bg-white/10 text-primary-200 shadow-pop">
-            <Store className="size-8" />
+          <div className="mx-auto mb-3 flex size-18 items-center justify-center rounded-3xl bg-white/10 p-1.5 shadow-pop ring-1 ring-white/20">
+            <Image
+              src="/profile/rajaei-owner.jpg"
+              alt="صورة رجائي المصري"
+              width={72}
+              height={72}
+              priority
+              className="size-full rounded-[1.25rem] object-cover shadow-lg"
+            />
           </div>
           <h1 className="text-2xl font-extrabold text-white">نظام رجائي المصري</h1>
           <p className="mt-1 text-sm text-primary-300">إدارة التوزيع والجملة</p>
