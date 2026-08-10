@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle2, DatabaseBackup, Download, Plus, Printer, Radio, Router, ShieldCheck, UserPlus, Wifi, WifiOff } from 'lucide-react';
+import { CheckCircle2, ClipboardCheck, DatabaseBackup, Download, Plus, Printer, Radio, Router, ShieldCheck, UserPlus, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Field, Input, NumericInput, Select } from '@/components/ui/input';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
@@ -256,6 +256,7 @@ export function SystemForm({
 // =====================================================================
 export function PrinterForm({ printer }: { printer: PrinterSettings }) {
   const { save, saving } = useSave();
+  const { success, error } = useToast();
   const [p, setP] = useState(printer);
   const [bridgeStatus, setBridgeStatus] = useState<'unknown' | 'checking' | 'online' | 'offline'>('unknown');
 
@@ -263,6 +264,15 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
     setBridgeStatus('checking');
     const ok = await checkBridge(p.bridge_url);
     setBridgeStatus(ok ? 'online' : 'offline');
+  };
+
+  const copyBridgeUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(p.bridge_url || 'http://127.0.0.1:9723');
+      success('تم نسخ رابط برنامج الطباعة');
+    } catch {
+      error('تعذر النسخ', 'انسخ الرابط يدويًا من الحقل.');
+    }
   };
 
   return (
@@ -315,6 +325,30 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
 
         {p.mode === 'bridge' ? (
           <div className="space-y-4 rounded-2xl border border-primary-200 bg-primary-50/50 p-3">
+            <div className="rounded-2xl border border-gold-200 bg-gradient-to-l from-gold-50 to-white p-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-extrabold text-primary-950">تشغيل سريع لبرنامج الطباعة</p>
+                  <p className="mt-1 text-xs leading-5 text-ink-600">
+                    نزّل الملف على جهاز الكاشير وشغّله، واترك النافذة السوداء مفتوحة أثناء الطباعة.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href="/print-bridge/start-rajaei-printer.cmd"
+                    download
+                    className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary-800 px-3 text-xs font-extrabold text-white shadow-sm transition-colors hover:bg-primary-900"
+                  >
+                    <Download className="size-4" />
+                    تنزيل مشغّل الطابعة
+                  </a>
+                  <Button variant="outline" size="sm" onClick={copyBridgeUrl}>
+                    <ClipboardCheck className="size-4" />
+                    نسخ الرابط
+                  </Button>
+                </div>
+              </div>
+            </div>
             <div className="grid gap-2 sm:grid-cols-2">
               <div className="flex items-start gap-2 rounded-xl bg-white p-3 ring-1 ring-primary-100">
                 <Router className="mt-0.5 size-5 text-primary-700" />
