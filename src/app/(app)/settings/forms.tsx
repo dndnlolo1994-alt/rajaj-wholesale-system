@@ -287,7 +287,7 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
             <div>
               <p className="text-sm font-extrabold text-primary-950">ربط لاسلكي سهل وفخم</p>
               <p className="mt-1 text-xs leading-5 text-ink-600">
-                للطابعات الحرارية Wi‑Fi/LAN: اختار «طابعة Wi‑Fi مباشرة»، اكتب IP الطابعة، اضغط فحص، ثم جرّب طباعة اختبار.
+                للطابعات الحرارية Wi‑Fi/LAN: اختار «طابعة Wi‑Fi مباشرة»، اكتب IP الطابعة، ثم اكتب رابط مشغّل الطابعة الظاهر في النافذة السوداء.
               </p>
               <p className="mt-1 text-xs font-bold leading-5 text-primary-800">
                 على الهاتف: افتح النظام عادي، والطباعة المباشرة تمر عبر جهاز كاشير/كمبيوتر شغّال عليه مشغّل الطابعة بنفس الشبكة. أما PDF / إرسال فيعمل من الهاتف مباشرة.
@@ -378,7 +378,7 @@ export function PrinterForm({ printer }: { printer: PrinterSettings }) {
                   onChange={(e) => setP({ ...p, printer_port: parseQty(e.target.value) ?? 9100 })} />
               </Field>
             </div>
-            <Field label="رابط برنامج الطباعة المحلي" hint="اتركه كما هو إذا البرنامج يعمل على نفس الجهاز">
+            <Field label="رابط برنامج الطباعة المحلي" hint="من الهاتف استخدم رابط الشبكة الظاهر في نافذة المشغّل، مثل http://192.168.1.25:9723">
               <div className="flex gap-2">
                 <Input dir="ltr" value={p.bridge_url} onChange={(e) => setP({ ...p, bridge_url: e.target.value.trim() })} />
                 <Button variant="outline" onClick={testBridge} loading={bridgeStatus === 'checking'}>

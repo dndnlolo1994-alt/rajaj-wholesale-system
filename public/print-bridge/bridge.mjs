@@ -2,8 +2,21 @@
 
 import { createServer } from 'node:http';
 import { Socket } from 'node:net';
+import { networkInterfaces } from 'node:os';
 
 const PORT = Number(process.argv[2] ?? process.env.BRIDGE_PORT ?? 9723);
+
+function bridgeUrls(port) {
+  const urls = [`http://127.0.0.1:${port}`];
+  for (const entries of Object.values(networkInterfaces())) {
+    for (const entry of entries ?? []) {
+      if (entry.family === 'IPv4' && !entry.internal) {
+        urls.push(`http://${entry.address}:${port}`);
+      }
+    }
+  }
+  return Array.from(new Set(urls));
+}
 
 function sendToPrinter(ip, port, data) {
   return new Promise((resolve, reject) => {
@@ -80,9 +93,17 @@ const server = createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
+  const urls = bridgeUrls(PORT);
   console.log('==============================================');
   console.log('  Rajaei Printer Bridge is running');
-  console.log(`  Bridge URL: http://127.0.0.1:${PORT}`);
+  console.log('');
+  console.log('  Use this URL when printing from this same computer:');
+  console.log(`  ${urls[0]}`);
+  console.log('');
+  console.log('  Use one of these URLs when printing from a phone/tablet on the same Wi-Fi:');
+  for (const url of urls.slice(1)) console.log(`  ${url}`);
+  if (urls.length === 1) console.log('  No network IP detected yet. Connect this computer to Wi-Fi/LAN and restart.');
+  console.log('');
   console.log('  Keep this window open while printing.');
   console.log('  Stop: Ctrl+C');
   console.log('==============================================');

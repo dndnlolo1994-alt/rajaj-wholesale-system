@@ -31,7 +31,8 @@ if errorlevel 1 (
 echo.
 echo ==================================================
 echo Rajaei Printer Bridge is starting...
-echo In the system settings use: http://127.0.0.1:9723
+echo If printing from the same computer use: http://127.0.0.1:9723
+echo If printing from a phone, use the network URL shown below, usually http://192.168.x.x:9723
 echo Keep this black window open while printing.
 echo ==================================================
 echo.
