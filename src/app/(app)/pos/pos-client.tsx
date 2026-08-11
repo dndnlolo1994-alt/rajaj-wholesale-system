@@ -544,58 +544,110 @@ export function PosClient({ categories, initialProducts = [], allowNegativeStock
         <div className="space-y-2">
           {/* الأقسام */}
           <div className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
-            <CategoryChip active={categoryId === null} onClick={() => setCategoryId(null)} label="كل الأقسام" categoryName="" />
+            <CategoryChip
+              active={categoryId === null && selectedBrand === null}
+              onClick={() => {
+                setCategoryId(null);
+                setSelectedBrand(null);
+              }}
+              label="كل الأقسام"
+              categoryName=""
+            />
             {categories.map((c) => (
-              <CategoryChip key={c.id} active={categoryId === c.id} onClick={() => setCategoryId(c.id)} label={c.name} categoryName={c.name} />
+              <CategoryChip
+                key={c.id}
+                active={categoryId === c.id}
+                onClick={() => {
+                  setCategoryId(c.id);
+                  setSelectedBrand(null);
+                }}
+                label={c.name}
+                categoryName={c.name}
+              />
             ))}
           </div>
 
-          {/* تصفية حسب الشركة + زر نمط العرض */}
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-ink-100 pt-2">
-            <div className="scrollbar-none -mx-1 flex flex-1 items-center gap-1.5 overflow-x-auto px-1">
-              <span className="flex items-center gap-1 text-xs font-bold text-ink-500 shrink-0 me-1">
-                <Building2 className="size-3.5" />
-                الشركات:
+          {/* اختصارات الشركات / الماركات */}
+          <div className="rounded-xl border border-primary-200/70 bg-gradient-to-r from-primary-50/90 via-emerald-50/50 to-white p-2.5 shadow-sm">
+            <div className="mb-1.5 flex items-center justify-between gap-2">
+              <span className="flex items-center gap-1.5 text-xs font-black text-primary-900">
+                <Building2 className="size-4 text-primary-700" />
+                اختصارات الشركات والموردين:
               </span>
               <button
-                onClick={() => setSelectedBrand(null)}
-                className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
-                  selectedBrand === null
-                    ? 'bg-primary-900 text-white shadow-sm'
+                onClick={() => setGroupByBrand(!groupByBrand)}
+                className={`flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold transition-all ${
+                  groupByBrand
+                    ? 'bg-primary-700 text-white shadow-xs'
                     : 'bg-ink-100 text-ink-700 hover:bg-ink-200'
                 }`}
+                title="تجميع المنتجات تحت عناوين الشركات"
               >
-                الكل
+                <Layers className="size-3.5" />
+                {groupByBrand ? 'مُقسّم حسب الشركة' : 'شبكة عامة'}
               </button>
-              {availableBrands.map((brand) => (
-                <button
-                  key={brand}
-                  onClick={() => setSelectedBrand(selectedBrand === brand ? null : brand)}
-                  className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
-                    selectedBrand === brand
-                      ? 'bg-primary-800 text-white shadow-sm ring-2 ring-primary-300'
-                      : 'border border-ink-200 bg-white text-ink-700 hover:border-primary-300 hover:bg-primary-50/50'
-                  }`}
-                >
-                  {brand}
-                </button>
-              ))}
             </div>
 
-            <button
-              onClick={() => setGroupByBrand(!groupByBrand)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold transition-all ${
-                groupByBrand
-                  ? 'border-primary-400 bg-primary-50 text-primary-900 shadow-sm'
-                  : 'border-ink-200 bg-white text-ink-600 hover:bg-ink-50'
-              }`}
-              title="تغيير طريقة العرض"
-            >
-              <Layers className="size-3.5 text-primary-700" />
-              <span>{groupByBrand ? 'مُرتّب حسب الشركة ✓' : 'عرض شبكي عام'}</span>
-            </button>
+            <div className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
+              <button
+                onClick={() => setSelectedBrand(null)}
+                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold transition-all active:scale-95 ${
+                  selectedBrand === null
+                    ? 'bg-primary-900 text-white shadow-sm ring-1 ring-primary-950'
+                    : 'border border-ink-200 bg-white text-ink-700 hover:bg-primary-50'
+                }`}
+              >
+                كل الشركات
+              </button>
+              {availableBrands.map((brand) => {
+                const isActive = selectedBrand === brand;
+                return (
+                  <button
+                    key={brand}
+                    onClick={() => {
+                      if (isActive) {
+                        setSelectedBrand(null);
+                      } else {
+                        setSelectedBrand(brand);
+                        setCategoryId(null);
+                      }
+                    }}
+                    className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-extrabold transition-all active:scale-95 ${
+                      isActive
+                        ? 'bg-primary-700 text-white shadow-md ring-2 ring-primary-400/40 scale-[1.02]'
+                        : 'border border-primary-200 bg-white text-primary-900 hover:border-primary-400 hover:bg-primary-50/70 shadow-xs'
+                    }`}
+                  >
+                    <Building2 className={`size-3.5 ${isActive ? 'text-white' : 'text-primary-600'}`} />
+                    <span>{brand}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
+
+        {/* تنبيه الشركة المحددة */}
+        {selectedBrand ? (
+          <div className="flex items-center justify-between rounded-xl border border-primary-300 bg-primary-700 px-3.5 py-2 text-white shadow-sm">
+            <span className="flex items-center gap-2 text-xs font-black">
+              <Building2 className="size-4 text-gold-300" />
+              عرض منتجات شركة: <span className="text-gold-200">{selectedBrand}</span>
+              <span className="tnum rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-extrabold text-white">
+                {filteredProducts.length} صنف
+              </span>
+            </span>
+            <button
+              onClick={() => setSelectedBrand(null)}
+              className="flex items-center gap-1 rounded-lg bg-white/15 px-2.5 py-1 text-xs font-extrabold text-white hover:bg-white/30 active:scale-95"
+            >
+              <X className="size-3.5" />
+              عرض كل الشركات
+            </button>
+          </div>
+        ) : null}
+
+        {/* مفضلة العميل */}
 
         {/* مفضلة العميل */}
         {customer && favorites.length > 0 ? (
