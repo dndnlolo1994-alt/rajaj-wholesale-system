@@ -25,9 +25,7 @@ export function ProductIcon({
 
   return (
     <span
-      className={`inline-flex shrink-0 items-center justify-center overflow-hidden ring-1 ring-black/5 ${
-        isSvgFile ? 'bg-white p-1' : 'bg-primary-50'
-      } ${sizes[size]} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center overflow-hidden ring-1 ring-black/5 bg-white p-1 ${sizes[size]} ${className}`}
     >
       <img
         src={src}
@@ -35,6 +33,9 @@ export function ProductIcon({
         aria-hidden="true"
         loading="lazy"
         decoding="async"
+        onError={(e) => {
+          e.currentTarget.src = '/icons/products/grocery.svg';
+        }}
         className={isSvgFile ? 'h-full w-full object-contain' : 'h-full w-full object-cover'}
       />
     </span>

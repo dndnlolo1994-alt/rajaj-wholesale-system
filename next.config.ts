@@ -20,6 +20,9 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
   serverExternalPackages: ['pdfkit'],
   outputFileTracingIncludes: {
     '/api/reports/full-pdf': ['./public/fonts/report-*.woff'],
@@ -34,8 +37,15 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-XSS-Protection', value: '0' },
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate, max-age=0' },
           { key: 'Permissions-Policy', value: 'camera=(self), microphone=(), geolocation=(), payment=(), usb=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+        ],
+      },
+      {
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate, max-age=0' },
         ],
       },
     ];
