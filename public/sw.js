@@ -1,7 +1,7 @@
 // Service Worker — تثبيت التطبيق كتطبيق هاتف + تخزين الأصول الثابتة
 // البيانات الحية تبقى من الشبكة دائمًا (نظام مالي — لا نعرض بيانات قديمة).
 
-const CACHE = 'rajaei-static-v1';
+const CACHE = 'rajaei-static-v2';
 const STATIC_PATTERNS = [/^\/_next\/static\//, /^\/icons\//, /^\/fonts\//, /\.(?:woff2?|png|svg|ico)$/];
 
 self.addEventListener('install', (event) => {
