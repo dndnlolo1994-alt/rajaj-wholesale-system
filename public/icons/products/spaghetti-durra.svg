@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Package -->
+  <rect x="14" y="10" width="36" height="44" rx="3" fill="#15803D"/>
+  <!-- Transparent window with Spaghetti strands inside -->
+  <rect x="18" y="22" width="28" height="20" rx="2" fill="#FEF08A"/>
+  <line x1="22" y1="23" x2="22" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <line x1="26" y1="23" x2="26" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <line x1="30" y1="23" x2="30" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <line x1="34" y1="23" x2="34" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <line x1="38" y1="23" x2="38" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <line x1="42" y1="23" x2="42" y2="41" stroke="#D97706" stroke-width="1.5"/>
+  <!-- Brand text -->
+  <text x="32" y="18" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#FFFFFF">الدرة</text>
+  <text x="32" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="4" font-weight="700" fill="#FEF08A">اسباغيتي 400غم</text>
+  <ellipse cx="32" cy="58" rx="14" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

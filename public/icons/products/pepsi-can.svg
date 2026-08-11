@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="pepsiBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E40AF"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+  </defs>
+  <!-- Can Body -->
+  <rect x="16" y="14" width="32" height="40" rx="4" fill="url(#pepsiBg)"/>
+  <!-- Top Rim -->
+  <ellipse cx="32" cy="14" rx="16" ry="4" fill="#D6D3D1"/>
+  <ellipse cx="32" cy="13" rx="4" ry="1.5" fill="#A8A29E"/>
+  <!-- Pepsi Circle Logo -->
+  <circle cx="32" cy="34" r="10" fill="#FFFFFF"/>
+  <path d="M22 34c2-4 6-6 10-6s8 2 10 6" fill="#DC2626"/>
+  <path d="M22 34c2 4 6 6 10 6s8-2 10-6" fill="#2563EB"/>
+  <text x="32" y="49" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="900" fill="#FFFFFF">بيبسي 330مل</text>
+  <!-- Highlight -->
+  <rect x="18" y="16" width="3" height="34" rx="1.5" fill="rgba(255,255,255,0.2)"/>
+  <ellipse cx="32" cy="58" rx="12" ry="2" fill="rgba(0,0,0,0.12)"/>
+</svg>

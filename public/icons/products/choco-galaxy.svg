@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="galaxyBg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#581C87"/>
+      <stop offset="100%" stop-color="#3B0764"/>
+    </linearGradient>
+  </defs>
+  <!-- Wrapper -->
+  <rect x="8" y="20" width="48" height="24" rx="3" fill="url(#galaxyBg)"/>
+  <!-- Gold Swirl -->
+  <path d="M10 24c8-3 18 6 30-2" stroke="#FACE15" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Galaxy text -->
+  <text x="32" y="35" text-anchor="middle" font-family="Georgia, serif" font-size="8" font-style="italic" font-weight="bold" fill="#FDE047">Galaxy</text>
+  <text x="32" y="41" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="700" fill="#E9D5FF">شوكولاتة حليب 22غم</text>
+  <!-- Chocolate piece peeking -->
+  <rect x="44" y="24" width="10" height="16" rx="1.5" fill="#78350F"/>
+  <ellipse cx="32" cy="54" rx="16" ry="2" fill="rgba(0,0,0,0.12)"/>
+</svg>

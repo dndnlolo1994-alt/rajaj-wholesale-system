@@ -1,5 +1,4 @@
 // أيقونات الأقسام — مسار ملف SVG لكل قسم حسب اسمه
-// يُستخدم في شريط الأقسام في POS وصفحة المنتجات
 export const CATEGORY_ICONS: Record<string, string> = {
   'شيبس ومقرمشات': '/icons/products/chips.svg',
   'عصائر ومشروبات': '/icons/products/juice-box.svg',
@@ -9,6 +8,28 @@ export const CATEGORY_ICONS: Record<string, string> = {
   'مواد تموينية': '/icons/products/grocery.svg',
   'مشروبات غازية': '/icons/products/soda-can.svg',
   'منظفات وورقيات': '/icons/products/cleaner.svg',
+};
+
+// خريطة أيقونات حقيقية ومحددة بالدقة لجميع منتجات النظام
+export const EXACT_PRODUCT_ICONS: Record<string, string> = {
+  'شيبس كتشب 30غم': '/icons/products/chips-ketchup.svg',
+  'شيبس ملح 30غم': '/icons/products/chips-salt.svg',
+  'بوشار جاهز 80غم': '/icons/products/popcorn-senyora.svg',
+  'عصير برتقال 250مل': '/icons/products/juice-suntop-orange.svg',
+  'عصير مانجا 250مل': '/icons/products/juice-suntop-mango.svg',
+  'مياه 1.5 لتر': '/icons/products/water-jana-15l.svg',
+  'مياه 0.5 لتر': '/icons/products/water-jana-05l.svg',
+  'بسكويت شاي 60غم': '/icons/products/biscuit-wataniya.svg',
+  'ويفر شوكولاتة 40غم': '/icons/products/wafer-alibaba.svg',
+  'شوكولاتة حليب 22غم': '/icons/products/choco-galaxy.svg',
+  'حلاوة طحينية 700غم': '/icons/products/halva-aseel.svg',
+  'رز مصري 5كغ': '/icons/products/rice-shallal.svg',
+  'سكر ناعم 1كغ': '/icons/products/sugar-ittihad.svg',
+  'زيت دوار الشمس 1.8لتر': '/icons/products/oil-afia.svg',
+  'معكرونة اسباغيتي 400غم': '/icons/products/spaghetti-durra.svg',
+  'كولا 330مل': '/icons/products/pepsi-can.svg',
+  'مشروب غازي ليمون 330مل': '/icons/products/7up-can.svg',
+  'مناديل ورقية 550 منديل': '/icons/products/fine-tissues.svg',
 };
 
 // ألوان الأقسام — خلفية ناعمة لكل قسم
@@ -25,39 +46,58 @@ export const CATEGORY_COLORS: Record<string, { bg: string; text: string; ring: s
 
 /**
  * قواعد المطابقة الذكية — تربط كلمات مفتاحية في اسم المنتج بملف SVG المناسب.
- * الترتيب مهم: أول مطابقة تُستخدم.
  */
 const PRODUCT_ICON_RULES: Array<{ keywords: string[]; icon: string }> = [
   // شيبس ومقرمشات
-  { keywords: ['بوشار', 'فشار', 'popcorn'], icon: '/icons/products/popcorn.svg' },
+  { keywords: ['كتشب', 'كشب'], icon: '/icons/products/chips-ketchup.svg' },
+  { keywords: ['ملح', 'سادة'], icon: '/icons/products/chips-salt.svg' },
+  { keywords: ['بوشار', 'فشار', 'popcorn'], icon: '/icons/products/popcorn-senyora.svg' },
   { keywords: ['شيبس', 'شيبسي', 'مقرمش', 'chips', 'crisp'], icon: '/icons/products/chips.svg' },
   // عصائر
+  { keywords: ['برتقال'], icon: '/icons/products/juice-suntop-orange.svg' },
+  { keywords: ['مانجا', 'مانجو'], icon: '/icons/products/juice-suntop-mango.svg' },
   { keywords: ['عصير', 'juice', 'نكتار', 'سن توب'], icon: '/icons/products/juice-box.svg' },
   // مياه
-  { keywords: ['مياه', 'ماء', 'water', 'مويه'], icon: '/icons/products/water-bottle.svg' },
+  { keywords: ['1.5', 'كبير'], icon: '/icons/products/water-jana-15l.svg' },
+  { keywords: ['0.5', 'صغير'], icon: '/icons/products/water-jana-05l.svg' },
+  { keywords: ['مياه', 'ماء', 'water', 'جنى'], icon: '/icons/products/water-jana-15l.svg' },
   // بسكويت
-  { keywords: ['ويفر', 'wafer', 'gaufrette'], icon: '/icons/products/wafer.svg' },
-  { keywords: ['بسكويت', 'بسكوت', 'biscuit', 'cookie'], icon: '/icons/products/biscuit.svg' },
+  { keywords: ['ويفر', 'wafer', 'gaufrette'], icon: '/icons/products/wafer-alibaba.svg' },
+  { keywords: ['بسكويت', 'بسكوت', 'biscuit', 'cookie'], icon: '/icons/products/biscuit-wataniya.svg' },
   // شوكولاتة
-  { keywords: ['حلاوة', 'طحينية', 'halva'], icon: '/icons/products/halva.svg' },
-  { keywords: ['شوكولاتة', 'شوكولا', 'chocolate', 'جالكسي', 'كادبوري', 'كيت كات', 'سنيكرز'], icon: '/icons/products/chocolate.svg' },
+  { keywords: ['حلاوة', 'طحينية', 'halva'], icon: '/icons/products/halva-aseel.svg' },
+  { keywords: ['شوكولاتة', 'شوكولا', 'chocolate', 'جالكسي', 'كادبوري', 'كيت كات', 'سنيكرز'], icon: '/icons/products/choco-galaxy.svg' },
   // مواد تموينية
-  { keywords: ['رز', 'أرز', 'rice'], icon: '/icons/products/rice-bag.svg' },
-  { keywords: ['سكر', 'sugar'], icon: '/icons/products/sugar.svg' },
-  { keywords: ['زيت', 'oil', 'عافية'], icon: '/icons/products/oil-bottle.svg' },
-  { keywords: ['معكرونة', 'سباغيتي', 'اسباغيتي', 'مكرونة', 'pasta', 'spaghetti'], icon: '/icons/products/pasta.svg' },
+  { keywords: ['رز', 'أرز', 'rice'], icon: '/icons/products/rice-shallal.svg' },
+  { keywords: ['سكر', 'sugar'], icon: '/icons/products/sugar-ittihad.svg' },
+  { keywords: ['زيت', 'oil', 'عافية'], icon: '/icons/products/oil-afia.svg' },
+  { keywords: ['معكرونة', 'سباغيتي', 'اسباغيتي', 'مكرونة', 'pasta', 'spaghetti'], icon: '/icons/products/spaghetti-durra.svg' },
   // مشروبات غازية
-  { keywords: ['كولا', 'بيبسي', 'سفن أب', 'سفن اب', 'ميرندا', 'غازي', 'pepsi', 'cola', 'sprite', '7up', 'fanta'], icon: '/icons/products/soda-can.svg' },
+  { keywords: ['سفن', '7up', 'ليمون'], icon: '/icons/products/7up-can.svg' },
+  { keywords: ['كولا', 'بيبسي', 'غازي', 'pepsi', 'cola'], icon: '/icons/products/pepsi-can.svg' },
   // منظفات
-  { keywords: ['مناديل', 'منديل', 'tissue', 'فاين'], icon: '/icons/products/tissue.svg' },
+  { keywords: ['مناديل', 'منديل', 'tissue', 'فاين'], icon: '/icons/products/fine-tissues.svg' },
   { keywords: ['منظف', 'صابون', 'شامبو', 'معقم', 'كلوركس', 'clean', 'soap'], icon: '/icons/products/cleaner.svg' },
 ];
 
 /**
- * يحاول إيجاد أيقونة SVG مطابقة لاسم المنتج.
- * يبحث في الاسم والبراند عن كلمات مفتاحية.
+ * يحاول إيجاد أيقونة SVG مطابقة لاسم المنتج بصلابة ودقة فائقة.
  */
 export function matchProductIcon(name: string, brand?: string | null): string | null {
+  const trimmed = name.trim();
+  // 1) مطابقة تامة بالاسم المباشر
+  if (EXACT_PRODUCT_ICONS[trimmed]) {
+    return EXACT_PRODUCT_ICONS[trimmed];
+  }
+
+  // 2) مطابقة جزئية بالاسم المباشر
+  for (const [exactName, icon] of Object.entries(EXACT_PRODUCT_ICONS)) {
+    if (trimmed.includes(exactName) || exactName.includes(trimmed)) {
+      return icon;
+    }
+  }
+
+  // 3) مطابقة القواعد والكلمات المفتاحية
   const haystack = `${name} ${brand ?? ''}`.toLowerCase();
   for (const rule of PRODUCT_ICON_RULES) {
     for (const kw of rule.keywords) {
@@ -69,16 +109,10 @@ export function matchProductIcon(name: string, brand?: string | null): string | 
   return null;
 }
 
-/**
- * يحاول إيجاد أيقونة قسم SVG حسب اسم القسم.
- */
 export function matchCategoryIcon(categoryName: string): string | null {
   return CATEGORY_ICONS[categoryName] ?? null;
 }
 
-/**
- * يحاول إيجاد ألوان القسم حسب اسمه.
- */
 export function matchCategoryColor(categoryName: string): { bg: string; text: string; ring: string } | null {
   return CATEGORY_COLORS[categoryName] ?? null;
 }

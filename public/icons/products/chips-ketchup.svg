@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="chipsKetchupBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#B91C1C"/>
+    </linearGradient>
+  </defs>
+  <!-- Bag base -->
+  <path d="M14 18c0-2 1-4 3-5l15-5 15 5c2 1 3 3 3 5v30c0 3-2 6-5 7l-13 4-13-4c-3-1-5-4-5-7V18z" fill="url(#chipsKetchupBg)"/>
+  <!-- Bag crinkle edges -->
+  <path d="M14 18c3 3 8 4 18 4s15-1 18-4" fill="none" stroke="#991B1B" stroke-width="1.5"/>
+  <path d="M14 48c3 2 8 3 18 3s15-1 18-3" fill="none" stroke="#7F1D1D" stroke-width="1.5"/>
+  <!-- Yellow brand banner -->
+  <path d="M16 22h32v8H16z" fill="#FBBF24"/>
+  <text x="32" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#7F1D1D">مستر شيبس</text>
+  <!-- Ketchup bottle mini icon -->
+  <rect x="29" y="32" width="6" height="12" rx="1.5" fill="#DC2626" stroke="#FEF2F2" stroke-width="0.5"/>
+  <rect x="30.5" y="30" width="3" height="3" rx="0.5" fill="#FEF2F2"/>
+  <!-- Chips graphics -->
+  <ellipse cx="23" cy="38" rx="4.5" ry="3" fill="#FDE68A" transform="rotate(-20 23 38)"/>
+  <ellipse cx="40" cy="39" rx="4.5" ry="3" fill="#FCD34D" transform="rotate(15 40 39)"/>
+  <!-- Flavor label -->
+  <text x="32" y="49" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="800" fill="#FFFFFF">كتشب 🍅</text>
+  <!-- Highlight -->
+  <path d="M18 20c4-1 9-1 12 0" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+  <ellipse cx="32" cy="58" rx="14" ry="2" fill="rgba(0,0,0,0.12)"/>
+</svg>

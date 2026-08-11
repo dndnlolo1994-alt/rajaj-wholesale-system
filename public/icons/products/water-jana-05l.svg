@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="jana05" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#BFDBFE"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+  </defs>
+  <!-- Bottle body smaller -->
+  <path d="M24 24c-2 2-3 4-3 8v16c0 3 2 4 4 4h14c2 0 4-1 4-4V32c0-4-1-6-3-8l-1-2V14H25v8l-1 2z" fill="url(#jana05)"/>
+  <!-- Cap -->
+  <rect x="25" y="8" width="14" height="6" rx="1.5" fill="#2563EB"/>
+  <!-- Blue Jana Label -->
+  <rect x="22" y="30" width="20" height="10" rx="1.5" fill="#1E40AF"/>
+  <text x="32" y="37" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#FFFFFF">جنى</text>
+  <text x="32" y="46" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="700" fill="#DBEAFE">0.5 لتر</text>
+  <!-- Highlight -->
+  <path d="M23 26c0 0 0 20 0 20" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+  <ellipse cx="32" cy="56" rx="10" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

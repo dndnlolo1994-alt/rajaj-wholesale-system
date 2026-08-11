@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="fineBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E40AF"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <!-- Fine Box -->
+  <rect x="10" y="20" width="44" height="30" rx="4" fill="url(#fineBg)"/>
+  <rect x="10" y="20" width="44" height="30" rx="4" fill="none" stroke="#60A5FA" stroke-width="0.8"/>
+  <!-- Top Oval -->
+  <ellipse cx="32" cy="20" rx="12" ry="4" fill="#EFF6FF"/>
+  <!-- Fluffy White Tissue -->
+  <path d="M26 20c-1-6 2-10 6-10s7 4 6 10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="0.8"/>
+  <path d="M24 16c0-4 3-7 8-7s8 3 7 7" fill="none" stroke="#F3F4F6" stroke-width="0.5"/>
+  <!-- Fine Brand Text -->
+  <text x="32" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-weight="900" font-style="italic" fill="#FFFFFF">Fine</text>
+  <text x="32" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="700" fill="#BFDBFE">فاين 550 منديل</text>
+  <ellipse cx="32" cy="56" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

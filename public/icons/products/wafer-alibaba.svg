@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Pack -->
+  <rect x="10" y="18" width="44" height="28" rx="3" fill="#D97706"/>
+  <rect x="14" y="22" width="36" height="20" rx="2" fill="#78350F"/>
+  <text x="32" y="31" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#FDE68A">علي بابا</text>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="4" font-weight="800" fill="#FFFFFF">ويفر شوكولاتة 40غم</text>
+  <ellipse cx="32" cy="56" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

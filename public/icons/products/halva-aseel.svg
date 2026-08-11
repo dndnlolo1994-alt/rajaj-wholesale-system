@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Container Tub -->
+  <rect x="12" y="16" width="40" height="34" rx="4" fill="#FEFCE8" stroke="#CA8A04" stroke-width="1"/>
+  <rect x="10" y="14" width="44" height="8" rx="3" fill="#CA8A04"/>
+  <text x="32" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#FFFFFF">الأصيل</text>
+  <!-- Halva contents -->
+  <rect x="15" y="24" width="34" height="22" rx="2" fill="#D4A574"/>
+  <path d="M18 30c4-2 8 2 12 0s8 2 12 0" stroke="#78350F" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M18 36c4-2 8 2 12 0s8 2 12 0" stroke="#78350F" stroke-width="1" fill="none" opacity="0.4"/>
+  <text x="32" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="4" font-weight="800" fill="#78350F">حلاوة طحينية 700غم</text>
+  <ellipse cx="32" cy="56" rx="14" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>
