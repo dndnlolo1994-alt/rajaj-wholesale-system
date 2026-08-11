@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Brown Wrapper -->
+  <rect x="8" y="20" width="48" height="24" rx="3" fill="#78350F"/>
+  <rect x="14" y="24" width="36" height="16" fill="#FFFFFF"/>
+  <text x="32" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="900" font-style="italic" fill="#1E40AF">SNICKERS</text>
+  <ellipse cx="32" cy="54" rx="16" ry="2" fill="rgba(0,0,0,0.12)"/>
+</svg>

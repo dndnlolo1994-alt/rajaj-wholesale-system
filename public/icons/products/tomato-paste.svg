@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Can -->
+  <rect x="18" y="16" width="28" height="36" rx="3" fill="#DC2626"/>
+  <ellipse cx="32" cy="16" rx="14" ry="3" fill="#991B1B"/>
+  <rect x="18" y="24" width="28" height="16" fill="#15803D"/>
+  <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#FFFFFF">الدرة</text>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="700" fill="#FEF08A">معجون طماطم</text>
+  <ellipse cx="32" cy="56" rx="12" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

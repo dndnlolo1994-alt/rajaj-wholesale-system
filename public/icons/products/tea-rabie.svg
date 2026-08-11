@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="12" y="16" width="40" height="34" rx="3" fill="#DC2626"/>
+  <rect x="16" y="20" width="32" height="26" rx="2" fill="#FACC15"/>
+  <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="900" fill="#15803D">ربيع</text>
+  <text x="32" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="4" font-weight="800" fill="#78350F">شاي أحمر 100 خيط</text>
+  <ellipse cx="32" cy="54" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="10" y="20" width="44" height="24" rx="3" fill="#D97706"/>
+  <rect x="14" y="24" width="36" height="16" fill="#FDE68A"/>
+  <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#78350F">دايجستف</text>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="800" fill="#78350F">الوطنية 80غم</text>
+  <ellipse cx="32" cy="54" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="suntopApple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#15803D"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="14" width="28" height="42" rx="3" fill="url(#suntopApple)"/>
+  <rect x="36" y="6" width="3" height="16" rx="1" fill="#E5E7EB"/>
+  <path d="M37.5 6c0-2.5 3.5-3.5 5.5-1" stroke="#E5E7EB" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <rect x="16" y="18" width="28" height="10" fill="#DC2626"/>
+  <text x="30" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="900" fill="#FDE047">سن توب</text>
+  <!-- Apple graphic -->
+  <circle cx="30" cy="38" r="6.5" fill="#EF4444"/>
+  <path d="M30 31.5c1-2 3-1 3 0" stroke="#15803D" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <text x="30" y="52" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="800" fill="#FFFFFF">تفاح 250مل</text>
+  <rect x="18" y="16" width="3" height="24" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+  <ellipse cx="30" cy="58" rx="12" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>
