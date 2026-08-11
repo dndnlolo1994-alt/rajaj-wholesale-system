@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="wbottle" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#BFDBFE"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+    <linearGradient id="wcap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <!-- Bottle body -->
+  <path d="M22 22c-2 2-4 5-4 10v20c0 3 2 5 5 5h18c3 0 5-2 5-5V32c0-5-2-8-4-10l-1-2V12h-18v8l-1 2z" fill="url(#wbottle)"/>
+  <!-- Water level -->
+  <path d="M18 36c2-1 6 1 10-1s6 2 10 0 4-1 6 0v16c0 3-2 5-5 5H23c-3 0-5-2-5-5V36z" fill="#3B82F6" opacity="0.4"/>
+  <!-- Cap -->
+  <rect x="24" y="6" width="16" height="7" rx="2" fill="url(#wcap)"/>
+  <!-- Label -->
+  <rect x="20" y="32" width="24" height="10" rx="2" fill="rgba(255,255,255,0.5)"/>
+  <path d="M26 37h12" stroke="#2563EB" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  <path d="M28 39h8" stroke="#2563EB" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+  <!-- Highlight -->
+  <path d="M22 24c0 0 0 28 0 28" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"/>
+  <!-- Droplet -->
+  <path d="M44 28c1-2 3-1 2 1s-3 1-2-1z" fill="rgba(255,255,255,0.5)"/>
+  <ellipse cx="32" cy="58" rx="11" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

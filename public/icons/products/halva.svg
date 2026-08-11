@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="halva" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4A574"/>
+      <stop offset="100%" stop-color="#92400E"/>
+    </linearGradient>
+  </defs>
+  <!-- Container -->
+  <rect x="12" y="16" width="40" height="34" rx="4" fill="#F5F5F4"/>
+  <rect x="12" y="16" width="40" height="34" rx="4" fill="none" stroke="#D6D3D1" stroke-width="1"/>
+  <!-- Lid -->
+  <rect x="10" y="14" width="44" height="8" rx="3" fill="#E7E5E4"/>
+  <rect x="10" y="14" width="44" height="8" rx="3" fill="none" stroke="#D6D3D1" stroke-width="0.8"/>
+  <!-- Halva visible inside -->
+  <rect x="15" y="24" width="34" height="22" rx="2" fill="url(#halva)"/>
+  <!-- Halva swirl texture -->
+  <path d="M18 30c4-2 8 2 12 0s8 2 12 0" fill="none" stroke="#78350F" stroke-width="0.8" opacity="0.3"/>
+  <path d="M18 35c4-2 8 2 12 0s8 2 12 0" fill="none" stroke="#78350F" stroke-width="0.8" opacity="0.3"/>
+  <path d="M18 40c4-2 8 2 12 0s8 2 12 0" fill="none" stroke="#78350F" stroke-width="0.8" opacity="0.3"/>
+  <!-- Label on container -->
+  <rect x="20" y="28" width="24" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+  <!-- Highlight -->
+  <rect x="14" y="25" width="4" height="18" rx="2" fill="rgba(255,255,255,0.15)"/>
+  <ellipse cx="32" cy="56" rx="14" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

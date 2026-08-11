@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="cleanbot" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cleancap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6EE7B7"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+  </defs>
+  <!-- Bottle body -->
+  <path d="M20 22c-2 2-3 4-3 6v22c0 3 2 5 5 5h20c3 0 5-2 5-5V28c0-2-1-4-3-6l-2-3V12H26v7l-2 3h-4z" fill="url(#cleanbot)"/>
+  <!-- Cap/nozzle -->
+  <rect x="24" y="6" width="16" height="7" rx="2" fill="url(#cleancap)"/>
+  <!-- Spray nozzle -->
+  <rect x="38" y="8" width="8" height="4" rx="2" fill="#A7F3D0"/>
+  <circle cx="48" cy="10" r="2" fill="#6EE7B7"/>
+  <!-- Label -->
+  <rect x="19" y="28" width="26" height="14" rx="2" fill="rgba(255,255,255,0.4)"/>
+  <!-- Label design -->
+  <path d="M23 33h18" stroke="#047857" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <path d="M25 36h14" stroke="#047857" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+  <!-- Bubbles -->
+  <circle cx="26" cy="46" r="2" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="34" cy="48" r="1.5" fill="rgba(255,255,255,0.25)"/>
+  <circle cx="30" cy="44" r="1" fill="rgba(255,255,255,0.35)"/>
+  <circle cx="38" cy="45" r="1.8" fill="rgba(255,255,255,0.2)"/>
+  <!-- Highlight -->
+  <path d="M21 24c0 0 0 26 0 26" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="32" cy="58" rx="12" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

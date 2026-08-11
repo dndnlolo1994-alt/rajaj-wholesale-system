@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="grocery" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <!-- Shopping bag -->
+  <path d="M12 22h40v28c0 3-2 5-5 5H17c-3 0-5-2-5-5V22z" fill="url(#grocery)"/>
+  <!-- Bag top fold -->
+  <rect x="12" y="20" width="40" height="5" rx="1" fill="#8B5CF6"/>
+  <!-- Handle left -->
+  <path d="M20 20c0-8 4-12 12-12s12 4 12 12" fill="none" stroke="#C4B5FD" stroke-width="3" stroke-linecap="round"/>
+  <!-- Items peeking out -->
+  <rect x="18" y="16" width="6" height="8" rx="1" fill="#FDE68A"/>
+  <circle cx="32" cy="18" r="4" fill="#F87171"/>
+  <rect x="38" y="15" width="5" height="9" rx="1" fill="#86EFAC"/>
+  <!-- Bag design -->
+  <rect x="20" y="32" width="24" height="8" rx="2" fill="rgba(255,255,255,0.15)"/>
+  <path d="M24 36h16" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Highlight -->
+  <rect x="14" y="22" width="3" height="28" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+  <ellipse cx="32" cy="58" rx="14" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

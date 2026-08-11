@@ -1,3 +1,5 @@
+import { matchProductIcon } from './product-icon-map';
+
 const PALETTE = [
   ['#064e3b', '#34d399'],
   ['#7c2d12', '#fdba74'],
@@ -35,8 +37,14 @@ export function productIconSrc({
   brand?: string | null;
   imageUrl?: string | null;
 }): string {
+  // 1) صورة مخصصة يدوية
   if (imageUrl?.trim()) return imageUrl.trim();
 
+  // 2) مطابقة ذكية — أيقونة SVG حسب اسم المنتج
+  const matched = matchProductIcon(name, brand);
+  if (matched) return matched;
+
+  // 3) fallback: الحروف الأولى مع تدرج لوني
   const label = initials(brand || name);
   const seed = brand || name;
   const [bg, fg] = PALETTE[hash(seed) % PALETTE.length];

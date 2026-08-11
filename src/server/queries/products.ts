@@ -26,6 +26,7 @@ export type ProductTab = 'all' | 'active' | 'inactive' | 'low';
 export interface ProductListParams {
   q?: string;
   categoryId?: string;
+  brand?: string;
   tab?: ProductTab;
   page?: number;
   pageSize?: number;
@@ -46,23 +47,20 @@ export async function listProducts(params: ProductListParams): Promise<{ rows: P
     let query = supabase
       .from('products')
       .select('*, category:categories(name)', { count: 'exact' })
+      .order('brand', { ascending: true, nullsFirst: false })
       .order('name', { ascending: true });
     const q = cleanQ(params.q);
-    if (q) query = query.or(`name.ilike.%${q}%,barcode.eq.${q},sku.ilike.%${q}%`);
+    if (q) query = query.or(`name.ilike.%${q}%,barcode.eq.${q},sku.ilike.%${q}%,brand.ilike.%${q}%`);
     if (params.categoryId) query = query.eq('category_id', params.categoryId);
+    if (params.brand) query = query.eq('brand', params.brand);
     return query;
   };
 
   if (tab === 'low') {
-    // PostgREST لا يدعم مقارنة عمودين (stock <= min) — نجلب الفعّالة ونرشّح هنا
-    const all: ProductListRow[] = [];
-    for (let i = 0; i < 10; i++) {
-      const { data, error } = await build().eq('is_active', true).range(i * 1000, i * 1000 + 999);
-      if (error) throw new Error(error.message);
-      const chunk = (data ?? []) as unknown as ProductListRow[];
-      all.push(...chunk);
-      if (chunk.length < 1000) break;
-    }
+    // PostgREST لا يدعم مقارنة عمودين (stock <= min) — نجلب الأصناف بطلب واحد ونرشّح
+    const { data, error } = await build().eq('is_active', true).range(0, 4999);
+    if (error) throw new Error(error.message);
+    const all = (data ?? []) as unknown as ProductListRow[];
     const low = all
       .filter((p) => Number(p.min_stock_units) > 0 && Number(p.stock_units) <= Number(p.min_stock_units))
       .sort((a, b) => (a.stock_units - a.min_stock_units) - (b.stock_units - b.min_stock_units));
@@ -199,19 +197,14 @@ export interface StockOverview {
 
 export async function getStockOverview(): Promise<StockOverview> {
   const supabase = await createClient();
-  const rows: StockLiteRow[] = [];
-  for (let i = 0; i < 10; i++) {
-    const { data, error } = await supabase
-      .from('products')
-      .select('id, name, stock_units, min_stock_units, units_per_carton, avg_unit_cost')
-      .eq('is_active', true)
-      .order('name')
-      .range(i * 1000, i * 1000 + 999);
-    if (error) throw new Error(error.message);
-    const chunk = (data ?? []) as StockLiteRow[];
-    rows.push(...chunk);
-    if (chunk.length < 1000) break;
-  }
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, name, stock_units, min_stock_units, units_per_carton, avg_unit_cost')
+    .eq('is_active', true)
+    .order('name')
+    .range(0, 4999);
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as StockLiteRow[];
   const totalValue = rows.reduce((a, r) => a + Number(r.stock_units) * Number(r.avg_unit_cost), 0);
   const lowList = rows
     .filter((r) => Number(r.min_stock_units) > 0 && Number(r.stock_units) <= Number(r.min_stock_units))
@@ -316,4 +309,18 @@ export async function getInventoryCount(
   if (itemsError) throw new Error(itemsError.message);
 
   return { count: data as unknown as InventoryCountFull, items: (items ?? []) as unknown as CountItemRow[] };
+}
+
+// ---------------------------------------------------------------------
+// قائمة الشركات / الماركات
+// ---------------------------------------------------------------------
+export async function listBrandsAll(): Promise<string[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from('products').select('brand').not('brand', 'is', null);
+  if (error) return [];
+  const set = new Set<string>();
+  for (const row of data ?? []) {
+    if (row.brand?.trim()) set.add(row.brand.trim());
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b, 'ar'));
 }

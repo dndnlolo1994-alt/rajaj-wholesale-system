@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="pcbag" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FEF3C7"/>
+      <stop offset="100%" stop-color="#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <!-- Bag -->
+  <path d="M16 16c0-2 1-3 3-3h26c2 0 3 1 3 3v32c0 3-2 5-4 5H20c-2 0-4-2-4-5V16z" fill="url(#pcbag)"/>
+  <path d="M16 16c0-2 1-3 3-3h26c2 0 3 1 3 3v32c0 3-2 5-4 5H20c-2 0-4-2-4-5V16z" fill="none" stroke="#D97706" stroke-width="0.8"/>
+  <!-- Popcorn pieces -->
+  <circle cx="26" cy="26" r="4" fill="#FFFBEB"/>
+  <circle cx="34" cy="24" r="4.5" fill="#FEF9C3"/>
+  <circle cx="30" cy="30" r="3.5" fill="#FFFBEB"/>
+  <circle cx="38" cy="30" r="3" fill="#FEF9C3"/>
+  <circle cx="24" cy="33" r="3" fill="#FFFBEB"/>
+  <circle cx="32" cy="36" r="4" fill="#FEF9C3"/>
+  <circle cx="28" cy="40" r="3.5" fill="#FFFBEB"/>
+  <circle cx="36" cy="38" r="3" fill="#FEF9C3"/>
+  <!-- Popcorn texture -->
+  <path d="M24 25c1-1 2 0 2 1M33 23c1-1 2 0 2 1M29 29c1-1 2 0 2 1M36 29c1-1 1 0 1 1" stroke="#D97706" stroke-width="0.5" fill="none" opacity="0.3"/>
+  <!-- Stripe on bag -->
+  <rect x="16" y="44" width="32" height="6" fill="#DC2626" opacity="0.7"/>
+  <path d="M22 47h20" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+  <ellipse cx="32" cy="58" rx="13" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

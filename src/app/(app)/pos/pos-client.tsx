@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Camera, ChevronDown, Minus, PauseCircle, Plus, Printer, ReceiptText,
-  ShoppingCart, Smartphone, Trash2, TriangleAlert, UserPlus, UserRound, X,
+  Building2, Camera, ChevronDown, Layers, Minus, PauseCircle, Plus, Printer, ReceiptText,
+  ShoppingCart, Smartphone, Store, Trash2, TriangleAlert, UserPlus, UserRound, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NumericInput } from '@/components/ui/input';
@@ -22,6 +22,7 @@ import { computeInvoice } from '@/lib/calc/invoice';
 import { parseMoney, parseQty, formatJOD } from '@/lib/calc/money';
 import { formatQty, unitLabel } from '@/lib/calc/units';
 import { fmtRelative } from '@/lib/format/date';
+import { matchCategoryIcon, matchCategoryColor } from '@/lib/product-icon-map';
 import type { Category, PaymentMethod, UnitKind } from '@/lib/types/db';
 import {
   barcodeLookupAction, customerFavoritesAction, posProductsAction,
@@ -47,13 +48,14 @@ interface CartLine {
 
 interface Props {
   categories: Category[];
+  initialProducts?: PosProduct[];
   allowNegativeStock: boolean;
   defaultMethod: PaymentMethod;
   printerWidth: number;
   autoPrint: boolean;
 }
 
-export function PosClient({ categories, allowNegativeStock, defaultMethod, printerWidth, autoPrint }: Props) {
+export function PosClient({ categories, initialProducts = [], allowNegativeStock, defaultMethod, printerWidth, autoPrint }: Props) {
   const router = useRouter();
   const { success, error: toastError } = useToast();
 
@@ -64,10 +66,38 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
 
   const [q, setQ] = useState('');
   const [categoryId, setCategoryId] = useState<string | null>(null);
-  const [products, setProducts] = useState<PosProduct[]>([]);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [groupByBrand, setGroupByBrand] = useState(true);
+  const [products, setProducts] = useState<PosProduct[]>(initialProducts);
   const [searching, setSearching] = useState(false);
   const [quickUnit, setQuickUnit] = useState<UnitKind>('carton');
   const [favorites, setFavorites] = useState<CustomerFavorite[]>([]);
+
+  // استخراج الشركات المتاحة في الأجواء الحالية
+  const availableBrands = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of products) {
+      if (p.brand?.trim()) set.add(p.brand.trim());
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'ar'));
+  }, [products]);
+
+  // الأصناف المفلترة حسب الشركة
+  const filteredProducts = useMemo(() => {
+    if (!selectedBrand) return products;
+    return products.filter((p) => (p.brand?.trim() || 'عام') === selectedBrand);
+  }, [products, selectedBrand]);
+
+  // تجميع الأصناف تحت تروسات كل شركة
+  const groupedByBrand = useMemo(() => {
+    const map = new Map<string, PosProduct[]>();
+    for (const p of filteredProducts) {
+      const brandName = p.brand?.trim() || 'أصناف عامة (بدون شركة)';
+      if (!map.has(brandName)) map.set(brandName, []);
+      map.get(brandName)!.push(p);
+    }
+    return Array.from(map.entries()).map(([brand, items]) => ({ brand, items }));
+  }, [filteredProducts]);
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -85,12 +115,55 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resumePayAfterCustomerRef = useRef(false);
 
-  // ---------- البحث ----------
+  // ذاكرة تخزين مؤقت ومجمع الأصناف لتجربة بيع فائقة السرعة
+  const productCache = useRef<Map<string, PosProduct[]>>(new Map());
+  const allProductsRef = useRef<PosProduct[]>(initialProducts);
+
+  if (initialProducts.length > 0 && !productCache.current.has('ALL:ALL:')) {
+    productCache.current.set('ALL:ALL:', initialProducts);
+  }
+
+  // ---------- البحث والتصفية الفورية ----------
   const runSearch = useCallback(
     (query: string, catId: string | null, custId: string | null) => {
+      const cacheKey = `${catId ?? 'ALL'}:${custId ?? 'ALL'}:${query.trim().toLowerCase()}`;
+
+      // 1) إن كانت النتيجة بالذاكرة -> عرض فوري 0ms
+      if (productCache.current.has(cacheKey)) {
+        setProducts(productCache.current.get(cacheKey)!);
+        setSearching(false);
+        return;
+      }
+
+      // 2) فلترة فورية من المجمع المحلي أثناء جلب التحديث من الخادم
+      let localMatches = allProductsRef.current;
+      if (catId) {
+        localMatches = localMatches.filter((p) => p.category_id === catId);
+      }
+      if (query.trim()) {
+        const term = query.trim().toLowerCase();
+        localMatches = localMatches.filter(
+          (p) =>
+            p.name.toLowerCase().includes(term) ||
+            (p.barcode && p.barcode.includes(term)) ||
+            (p.brand && p.brand.toLowerCase().includes(term)),
+        );
+      }
+      if (localMatches.length > 0) {
+        setProducts(localMatches);
+      }
+
+      // 3) جلب النتائج من الخادم للتحديث والباركودات الجديدة
       setSearching(true);
       posProductsAction({ q: query, category_id: catId, customer_id: custId }).then((res) => {
-        if (res.ok) setProducts(res.data);
+        if (res.ok) {
+          productCache.current.set(cacheKey, res.data);
+          setProducts(res.data);
+          // دمج في المجمع المحلي
+          const map = new Map(allProductsRef.current.map((p) => [p.id, p]));
+          for (const item of res.data) map.set(item.id, item);
+          allProductsRef.current = Array.from(map.values());
+        }
         setSearching(false);
       });
     },
@@ -99,7 +172,9 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
 
   useEffect(() => {
     if (searchTimer.current) clearTimeout(searchTimer.current);
-    searchTimer.current = setTimeout(() => runSearch(q, categoryId, customer?.id ?? null), q ? 280 : 0);
+    // استجابة فورية (0ms) للتبويب أو المسح، و180ms فقط للطباعة الممتدة
+    const delay = q.trim() ? 180 : 0;
+    searchTimer.current = setTimeout(() => runSearch(q, categoryId, customer?.id ?? null), delay);
     return () => {
       if (searchTimer.current) clearTimeout(searchTimer.current);
     };
@@ -465,12 +540,61 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
           />
         </div>
 
-        {/* الأقسام */}
-        <div className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
-          <CategoryChip active={categoryId === null} onClick={() => setCategoryId(null)} label="الكل" />
-          {categories.map((c) => (
-            <CategoryChip key={c.id} active={categoryId === c.id} onClick={() => setCategoryId(c.id)} label={c.name} />
-          ))}
+        {/* الأقسام والشركات */}
+        <div className="space-y-2">
+          {/* الأقسام */}
+          <div className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
+            <CategoryChip active={categoryId === null} onClick={() => setCategoryId(null)} label="كل الأقسام" categoryName="" />
+            {categories.map((c) => (
+              <CategoryChip key={c.id} active={categoryId === c.id} onClick={() => setCategoryId(c.id)} label={c.name} categoryName={c.name} />
+            ))}
+          </div>
+
+          {/* تصفية حسب الشركة + زر نمط العرض */}
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-ink-100 pt-2">
+            <div className="scrollbar-none -mx-1 flex flex-1 items-center gap-1.5 overflow-x-auto px-1">
+              <span className="flex items-center gap-1 text-xs font-bold text-ink-500 shrink-0 me-1">
+                <Building2 className="size-3.5" />
+                الشركات:
+              </span>
+              <button
+                onClick={() => setSelectedBrand(null)}
+                className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+                  selectedBrand === null
+                    ? 'bg-primary-900 text-white shadow-sm'
+                    : 'bg-ink-100 text-ink-700 hover:bg-ink-200'
+                }`}
+              >
+                الكل
+              </button>
+              {availableBrands.map((brand) => (
+                <button
+                  key={brand}
+                  onClick={() => setSelectedBrand(selectedBrand === brand ? null : brand)}
+                  className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+                    selectedBrand === brand
+                      ? 'bg-primary-800 text-white shadow-sm ring-2 ring-primary-300'
+                      : 'border border-ink-200 bg-white text-ink-700 hover:border-primary-300 hover:bg-primary-50/50'
+                  }`}
+                >
+                  {brand}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setGroupByBrand(!groupByBrand)}
+              className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold transition-all ${
+                groupByBrand
+                  ? 'border-primary-400 bg-primary-50 text-primary-900 shadow-sm'
+                  : 'border-ink-200 bg-white text-ink-600 hover:bg-ink-50'
+              }`}
+              title="تغيير طريقة العرض"
+            >
+              <Layers className="size-3.5 text-primary-700" />
+              <span>{groupByBrand ? 'مُرتّب حسب الشركة ✓' : 'عرض شبكي عام'}</span>
+            </button>
+          </div>
         </div>
 
         {/* مفضلة العميل */}
@@ -513,51 +637,52 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
           </div>
         ) : null}
 
-        {/* شبكة الأصناف */}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
-          {products.map((p) => {
-            const low = p.min_stock_units > 0 && p.stock_units <= p.min_stock_units;
-            const out = p.stock_units <= 0;
-            return (
-              <div key={p.id} className="flex flex-col rounded-xl border border-ink-200 bg-white p-2.5 shadow-card">
-                <div className="flex items-start gap-2">
-                  <ProductIcon name={p.name} brand={p.brand} imageUrl={p.image_url} size="sm" />
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 min-h-10 text-sm font-bold leading-5">{p.name}</p>
-                    {p.brand ? <p className="truncate text-[10px] font-bold text-ink-400">{p.brand}</p> : null}
+        {/* عرض الأصناف — مرتبة حسب الشركة أو شبكة عامة */}
+        {filteredProducts.length === 0 && !searching ? (
+          <div className="rounded-xl border border-dashed border-ink-300 py-10 text-center text-sm text-ink-500">
+            لا توجد أصناف مطابقة للشركة أو البحث المحدد
+          </div>
+        ) : groupByBrand ? (
+          <div className="space-y-4">
+            {groupedByBrand.map(({ brand, items }) => (
+              <div key={brand} className="space-y-2">
+                <div className="flex items-center justify-between rounded-lg border border-primary-200/80 bg-gradient-to-r from-primary-50 to-emerald-50/50 px-3 py-1.5 shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="flex size-6 items-center justify-center rounded-md bg-primary-700 text-white">
+                      <Building2 className="size-3.5" />
+                    </span>
+                    <h3 className="text-xs font-black text-primary-950">{brand}</h3>
                   </div>
+                  <span className="tnum rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-primary-800 ring-1 ring-primary-200">
+                    {items.length} صنف
+                  </span>
                 </div>
-                <p className={`mt-1 text-[11px] font-bold ${out ? 'text-red-600' : low ? 'text-amber-600' : 'text-ink-500'}`}>
-                  {out ? 'نفد المخزون' : formatQty(p.stock_units, p.units_per_carton)}
-                </p>
-                <div className="mt-auto space-y-1 pt-2">
-                  <button
-                    onClick={() => addProduct(p, 'carton')}
-                    disabled={out && !allowNegativeStock}
-                    className="flex w-full items-center justify-between rounded-lg bg-primary-700 px-2.5 py-1.5 text-white transition-colors hover:bg-primary-800 disabled:opacity-40"
-                  >
-                    <span className="text-xs font-bold">كرتونة</span>
-                    <span className="tnum text-xs font-extrabold" dir="ltr">
-                      {formatJOD(p.special_price_carton ?? p.sale_price_carton, { symbol: false })}
-                      {p.special_price_carton != null ? ' ★' : ''}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => addProduct(p, 'piece')}
-                    disabled={out && !allowNegativeStock}
-                    className="flex w-full items-center justify-between rounded-lg border border-primary-200 bg-primary-50 px-2.5 py-1.5 text-primary-800 transition-colors hover:bg-primary-100 disabled:opacity-40"
-                  >
-                    <span className="text-xs font-bold">حبة</span>
-                    <span className="tnum text-xs font-extrabold" dir="ltr">
-                      {formatJOD(p.special_price_piece ?? p.sale_price_piece, { symbol: false })}
-                      {p.special_price_piece != null ? ' ★' : ''}
-                    </span>
-                  </button>
+
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
+                  {items.map((p) => (
+                    <PosProductCard
+                      key={p.id}
+                      p={p}
+                      allowNegativeStock={allowNegativeStock}
+                      addProduct={addProduct}
+                    />
+                  ))}
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
+            {filteredProducts.map((p) => (
+              <PosProductCard
+                key={p.id}
+                p={p}
+                allowNegativeStock={allowNegativeStock}
+                addProduct={addProduct}
+              />
+            ))}
+          </div>
+        )}
         {products.length === 0 && !searching ? (
           <div className="rounded-xl border border-dashed border-ink-300 py-10 text-center text-sm text-ink-500">
             لا توجد أصناف مطابقة
@@ -744,14 +869,30 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
 }
 
 // ======================================================================
-function CategoryChip({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
+function CategoryChip({ active, onClick, label, categoryName }: { active: boolean; onClick: () => void; label: string; categoryName: string }) {
+  const iconSrc = categoryName ? matchCategoryIcon(categoryName) : null;
+  const colors = categoryName ? matchCategoryColor(categoryName) : null;
+
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition-colors ${
-        active ? 'bg-primary-700 text-white shadow-sm' : 'border border-ink-200 bg-white text-ink-700 hover:border-primary-300'
+      className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
+        active
+          ? 'bg-primary-700 text-white shadow-md ring-2 ring-primary-400/30 scale-[1.02]'
+          : 'border bg-white text-ink-700 hover:shadow-sm active:scale-95'
       }`}
+      style={
+        !active && colors
+          ? { borderColor: colors.ring, backgroundColor: colors.bg, color: colors.text }
+          : !active
+            ? { borderColor: 'var(--color-ink-200)' }
+            : undefined
+      }
     >
+      {iconSrc ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={iconSrc} alt="" className="size-4 shrink-0" aria-hidden="true" />
+      ) : null}
       {label}
     </button>
   );
@@ -960,6 +1101,62 @@ function CartLineRow({
           المتوفر: {formatQty(line.stock_units, line.units_per_carton)} فقط
         </p>
       ) : null}
+    </div>
+  );
+}
+
+function PosProductCard({
+  p,
+  allowNegativeStock,
+  addProduct,
+}: {
+  p: PosProduct;
+  allowNegativeStock: boolean;
+  addProduct: (p: PosProduct, unit: UnitKind, price?: number, qty?: number) => void;
+}) {
+  const low = p.min_stock_units > 0 && p.stock_units <= p.min_stock_units;
+  const out = p.stock_units <= 0;
+
+  return (
+    <div
+      className={`group flex flex-col rounded-xl border bg-white p-2.5 shadow-card transition-all hover:shadow-pop hover:-translate-y-0.5 ${
+        out ? 'border-red-200 opacity-70' : 'border-ink-200'
+      }`}
+    >
+      <div className="flex items-center gap-2">
+        <ProductIcon name={p.name} brand={p.brand} imageUrl={p.image_url} size="md" />
+        <div className="min-w-0 flex-1">
+          <p className="line-clamp-2 text-sm font-bold leading-5">{p.name}</p>
+          {p.brand ? <p className="truncate text-[10px] font-extrabold text-primary-700">{p.brand}</p> : null}
+        </div>
+      </div>
+      <p className={`mt-1.5 text-[11px] font-bold ${out ? 'text-red-600' : low ? 'text-amber-600' : 'text-ink-500'}`}>
+        {out ? '⚠ نفد المخزون' : formatQty(p.stock_units, p.units_per_carton)}
+      </p>
+      <div className="mt-auto space-y-1 pt-2">
+        <button
+          onClick={() => addProduct(p, 'carton')}
+          disabled={out && !allowNegativeStock}
+          className="flex w-full items-center justify-between rounded-lg bg-primary-700 px-2.5 py-2 text-white transition-all hover:bg-primary-800 hover:shadow-sm active:scale-[0.98] disabled:opacity-40"
+        >
+          <span className="text-xs font-bold">📦 كرتونة</span>
+          <span className="tnum text-xs font-extrabold" dir="ltr">
+            {formatJOD(p.special_price_carton ?? p.sale_price_carton, { symbol: false })}
+            {p.special_price_carton != null ? ' ★' : ''}
+          </span>
+        </button>
+        <button
+          onClick={() => addProduct(p, 'piece')}
+          disabled={out && !allowNegativeStock}
+          className="flex w-full items-center justify-between rounded-lg border border-primary-200 bg-primary-50 px-2.5 py-2 text-primary-800 transition-all hover:bg-primary-100 hover:shadow-sm active:scale-[0.98] disabled:opacity-40"
+        >
+          <span className="text-xs font-bold">🔹 حبة</span>
+          <span className="tnum text-xs font-extrabold" dir="ltr">
+            {formatJOD(p.special_price_piece ?? p.sale_price_piece, { symbol: false })}
+            {p.special_price_piece != null ? ' ★' : ''}
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

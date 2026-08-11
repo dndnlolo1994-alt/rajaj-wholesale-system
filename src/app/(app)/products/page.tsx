@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { requireProfile } from '@/lib/auth';
 import { canManage } from '@/lib/perms';
-import { listCategoriesAll, listProducts, type ProductTab } from '@/server/queries/products';
+import { listBrandsAll, listCategoriesAll, listProducts, type ProductTab } from '@/server/queries/products';
 import { PageHeader, Money, EmptyState } from '@/components/ui/misc';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic';
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; tab?: string; page?: string; category?: string }>;
+  searchParams: Promise<{ q?: string; tab?: string; page?: string; category?: string; brand?: string }>;
 }) {
   const profile = await requireProfile();
   const params = await searchParams;
@@ -28,9 +28,10 @@ export default async function ProductsPage({
   const page = Number(params.page ?? 1);
   const canEdit = ['owner', 'manager', 'warehouse'].includes(profile.role);
 
-  const [{ rows, total }, categories] = await Promise.all([
-    listProducts({ q: params.q, categoryId: params.category, tab, page }),
+  const [{ rows, total }, categories, brands] = await Promise.all([
+    listProducts({ q: params.q, categoryId: params.category, brand: params.brand, tab, page }),
     listCategoriesAll(),
+    listBrandsAll(),
   ]);
 
   return (
@@ -54,8 +55,9 @@ export default async function ProductsPage({
       />
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <SearchInput placeholder="بحث بالاسم أو الباركود أو SKU..." className="w-full sm:w-72" />
-        <CategoryFilter categories={categories} selected={params.category} q={params.q} tab={params.tab} />
+        <SearchInput placeholder="بحث بالاسم، الشركة، الباركود..." className="w-full sm:w-72" />
+        <CategoryFilter categories={categories} selected={params.category} q={params.q} tab={params.tab} brand={params.brand} />
+        <BrandFilter brands={brands} selected={params.brand} q={params.q} tab={params.tab} category={params.category} />
       </div>
 
       <LinkTabs
@@ -188,20 +190,23 @@ function CategoryFilter({
   selected,
   q,
   tab,
+  brand,
 }: {
   categories: { id: string; name: string }[];
   selected?: string;
   q?: string;
   tab?: string;
+  brand?: string;
 }) {
   return (
     <form className="flex items-center gap-2" method="get">
       {q ? <input type="hidden" name="q" value={q} /> : null}
       {tab ? <input type="hidden" name="tab" value={tab} /> : null}
+      {brand ? <input type="hidden" name="brand" value={brand} /> : null}
       <select
         name="category"
         defaultValue={selected ?? ''}
-        className="h-11 rounded-lg border border-ink-300 bg-white px-2.5 text-sm"
+        className="h-11 rounded-lg border border-ink-300 bg-white px-2.5 text-sm font-bold"
       >
         <option value="">كل الأقسام</option>
         {categories.map((c) => (
@@ -210,6 +215,41 @@ function CategoryFilter({
       </select>
       <Button type="submit" variant="outline" size="sm">
         تصفية
+      </Button>
+    </form>
+  );
+}
+
+function BrandFilter({
+  brands,
+  selected,
+  q,
+  tab,
+  category,
+}: {
+  brands: string[];
+  selected?: string;
+  q?: string;
+  tab?: string;
+  category?: string;
+}) {
+  return (
+    <form className="flex items-center gap-2" method="get">
+      {q ? <input type="hidden" name="q" value={q} /> : null}
+      {tab ? <input type="hidden" name="tab" value={tab} /> : null}
+      {category ? <input type="hidden" name="category" value={category} /> : null}
+      <select
+        name="brand"
+        defaultValue={selected ?? ''}
+        className="h-11 rounded-lg border border-primary-300 bg-white px-2.5 text-sm font-bold text-primary-900 shadow-sm"
+      >
+        <option value="">🏭 كل الشركات / الماركات</option>
+        {brands.map((b) => (
+          <option key={b} value={b}>{b}</option>
+        ))}
+      </select>
+      <Button type="submit" variant="outline" size="sm">
+        تصفية شركة
       </Button>
     </form>
   );

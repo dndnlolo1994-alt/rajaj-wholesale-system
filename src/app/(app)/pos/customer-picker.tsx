@@ -21,15 +21,25 @@ export function CustomerPicker({
   const [loading, setLoading] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const cachedCustomers = useRef<QuickCustomer[]>([]);
+
   useEffect(() => {
     if (!open) return;
-    setLoading(true);
+    if (cachedCustomers.current.length > 0 && !q.trim()) {
+      setCustomers(cachedCustomers.current);
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(async () => {
       const res = await quickCustomersAction(q);
-      if (res.ok) setCustomers(res.data);
+      if (res.ok) {
+        setCustomers(res.data);
+        if (!q.trim()) cachedCustomers.current = res.data;
+      }
       setLoading(false);
-    }, q ? 300 : 0);
+    }, q ? 200 : 0);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };

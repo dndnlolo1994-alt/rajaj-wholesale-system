@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="tissue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DBEAFE"/>
+      <stop offset="100%" stop-color="#93C5FD"/>
+    </linearGradient>
+  </defs>
+  <!-- Box body -->
+  <rect x="10" y="18" width="44" height="32" rx="4" fill="url(#tissue)"/>
+  <rect x="10" y="18" width="44" height="32" rx="4" fill="none" stroke="#60A5FA" stroke-width="0.8"/>
+  <!-- Opening on top -->
+  <ellipse cx="32" cy="18" rx="10" ry="4" fill="#EFF6FF"/>
+  <ellipse cx="32" cy="18" rx="10" ry="4" fill="none" stroke="#93C5FD" stroke-width="0.8"/>
+  <!-- Tissue coming out -->
+  <path d="M28 18c-2-6 0-10 4-10s6 4 4 10" fill="white" stroke="#D1D5DB" stroke-width="0.8"/>
+  <path d="M26 15c-1-4 1-8 6-8s7 4 6 8" fill="none" stroke="#E5E7EB" stroke-width="0.5"/>
+  <!-- Decorative pattern on box -->
+  <path d="M14 30c4 2 8-1 12 1s8-2 12 0s6 1 8-1" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
+  <path d="M14 36c4 2 8-1 12 1s8-2 12 0s6 1 8-1" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.3"/>
+  <!-- Label -->
+  <rect x="20" y="40" width="24" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+  <!-- Highlight -->
+  <rect x="12" y="20" width="3" height="26" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+  <ellipse cx="32" cy="56" rx="16" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

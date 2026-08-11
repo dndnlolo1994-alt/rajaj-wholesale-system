@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="oilbot" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="oilcap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#B91C1C"/>
+    </linearGradient>
+  </defs>
+  <!-- Bottle body -->
+  <path d="M20 24c-2 2-4 4-4 8v18c0 3 2 5 5 5h22c3 0 5-2 5-5V32c0-4-2-6-4-8l-2-3V14H26v7l-2 3h-4z" fill="url(#oilbot)"/>
+  <!-- Oil level shimmer -->
+  <path d="M16 34c3-1 8 1 14 0s10 1 14 0v16c0 3-2 5-5 5H21c-3 0-5-2-5-5V34z" fill="#D97706" opacity="0.3"/>
+  <!-- Cap -->
+  <rect x="24" y="8" width="16" height="7" rx="2" fill="url(#oilcap)"/>
+  <!-- Handle -->
+  <path d="M42 18c4-1 6 2 6 6s-2 6-4 6" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <!-- Label -->
+  <rect x="18" y="32" width="24" height="10" rx="2" fill="rgba(255,255,255,0.4)"/>
+  <path d="M22 37h16" stroke="#92400E" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  <path d="M24 39h12" stroke="#92400E" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
+  <!-- Highlight -->
+  <path d="M20 26c0 0 0 22 0 22" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="32" cy="58" rx="12" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>

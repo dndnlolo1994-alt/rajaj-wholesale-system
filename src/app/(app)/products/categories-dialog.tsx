@@ -8,6 +8,7 @@ import { Dialog, ConfirmDialog } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/toast';
 import type { Category } from '@/lib/types/db';
+import { matchCategoryIcon, matchCategoryColor } from '@/lib/product-icon-map';
 import { createCategoryAction, deleteCategoryAction, renameCategoryAction } from '@/server/actions/products';
 
 /** حوار إدارة الأقسام: إضافة + إعادة تسمية + حذف */
@@ -134,7 +135,22 @@ export function CategoriesDialog({ categories, canManage }: { categories: Catego
                   </>
                 ) : (
                   <>
-                    <span className="text-sm font-bold text-ink-900">{c.name}</span>
+                    <span className="flex items-center gap-2">
+                      {(() => {
+                        const iconSrc = matchCategoryIcon(c.name);
+                        const colors = matchCategoryColor(c.name);
+                        return iconSrc ? (
+                          // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+                          <span
+                            className="flex size-7 shrink-0 items-center justify-center rounded-lg"
+                            style={colors ? { backgroundColor: colors.bg } : undefined}
+                          >
+                            <img src={iconSrc} alt="" className="size-5" aria-hidden="true" />
+                          </span>
+                        ) : null;
+                      })()}
+                      <span className="text-sm font-bold text-ink-900">{c.name}</span>
+                    </span>
                     {canManage ? (
                       <div className="flex shrink-0 items-center gap-1">
                         <button

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="jbox" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+  </defs>
+  <!-- Box body -->
+  <rect x="16" y="14" width="26" height="40" rx="3" fill="url(#jbox)"/>
+  <!-- Label area -->
+  <rect x="19" y="28" width="20" height="12" rx="2" fill="#FED7AA"/>
+  <!-- Fruit circle -->
+  <circle cx="29" cy="34" r="4" fill="#FDBA74"/>
+  <path d="M29 30c-2 0-3 1.5-3 4s1 4 3 4 3-1.5 3-4-1-4-3-4z" fill="#F97316"/>
+  <!-- Straw -->
+  <rect x="34" y="6" width="3" height="18" rx="1.5" fill="#E5E7EB"/>
+  <path d="M35.5 6c0-2 3-3 5-1" fill="none" stroke="#E5E7EB" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Top fold -->
+  <path d="M16 17h26" stroke="#C2410C" stroke-width="0.5" opacity="0.3"/>
+  <!-- Highlight -->
+  <rect x="18" y="16" width="3" height="20" rx="1.5" fill="rgba(255,255,255,0.2)"/>
+  <ellipse cx="29" cy="58" rx="12" ry="2" fill="rgba(0,0,0,0.08)"/>
+</svg>
