@@ -15,6 +15,7 @@ import { StatusBadge } from '@/components/ui/badge';
 import { Pagination } from '@/components/ui/pagination';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { Button } from '@/components/ui/button';
+import { ProductIcon } from '@/components/products/product-icon';
 import { formatQty } from '@/lib/calc/units';
 import { fmtDateShort, fmtDateTime } from '@/lib/format/date';
 import type { StockMoveType } from '@/lib/types/db';
@@ -141,7 +142,10 @@ async function OverviewTab({ showProfit }: { showProfit: boolean }) {
             <div className="divide-y divide-ink-100">
               {overview.lowList.slice(0, 8).map((p) => (
                 <Link key={p.id} href={`/products/${p.id}`} className="flex items-center justify-between gap-3 px-4 py-2.5 hover:bg-primary-50/40">
-                  <p className="min-w-0 truncate text-sm font-bold">{p.name}</p>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <ProductIcon name={p.name} size="sm" />
+                    <p className="min-w-0 truncate text-sm font-bold">{p.name}</p>
+                  </div>
                   <div className="shrink-0 text-end">
                     <p className="tnum text-sm font-extrabold text-red-600">{formatQty(p.stock_units, p.units_per_carton)}</p>
                     <p className="tnum text-[11px] text-ink-500">الحد: {formatQty(p.min_stock_units, p.units_per_carton)}</p>
@@ -161,11 +165,14 @@ async function OverviewTab({ showProfit }: { showProfit: boolean }) {
             <div className="divide-y divide-ink-100">
               {stagnant.rows.slice(0, 8).map((p) => (
                 <Link key={p.id} href={`/products/${p.id}`} className="flex items-center justify-between gap-3 px-4 py-2.5 hover:bg-primary-50/40">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{p.name}</p>
-                    <p className="text-[11px] text-ink-500">
-                      {p.last_sale_at ? `آخر بيع: ${fmtDateShort(p.last_sale_at)}` : 'لم يُبع أبدًا'}
-                    </p>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <ProductIcon name={p.name} size="sm" />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold">{p.name}</p>
+                      <p className="text-[11px] text-ink-500">
+                        {p.last_sale_at ? `آخر بيع: ${fmtDateShort(p.last_sale_at)}` : 'لم يُبع أبدًا'}
+                      </p>
+                    </div>
                   </div>
                   <div className="shrink-0 text-end">
                     <p className="tnum text-sm font-bold">{formatQty(p.stock_units, p.units_per_carton)}</p>

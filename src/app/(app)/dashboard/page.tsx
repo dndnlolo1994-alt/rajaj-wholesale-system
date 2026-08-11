@@ -13,6 +13,7 @@ import { BarChart } from '@/components/charts/bar-chart';
 import { formatQty } from '@/lib/calc/units';
 import { fmtDateShort, fmtRelative, fmtTime, fmtWeekday } from '@/lib/format/date';
 import { formatJOD } from '@/lib/calc/money';
+import { ProductIcon } from '@/components/products/product-icon';
 
 export const dynamic = 'force-dynamic';
 
@@ -179,6 +180,7 @@ export default async function DashboardPage() {
             rows={d.top_products_qty.slice(0, 5).map((p) => ({
               key: p.id,
               href: `/products/${p.id}`,
+              icon: <ProductIcon name={p.name} size="sm" />,
               title: p.name,
               sub: formatQty(p.qty_units, p.units_per_carton ?? 1),
               meta: <Money value={p.revenue} className="text-sm" />,
@@ -193,6 +195,7 @@ export default async function DashboardPage() {
             rows={d.low_stock_list.slice(0, 5).map((p) => ({
               key: p.id,
               href: `/products/${p.id}`,
+              icon: <ProductIcon name={p.name} size="sm" />,
               title: p.name,
               sub: `الحد الأدنى ${p.min_stock_units} حبة`,
               meta: (
@@ -246,6 +249,7 @@ export default async function DashboardPage() {
             empty="لا حركات بعد"
             rows={d.recent_movements.slice(0, 5).map((m) => ({
               key: String(m.id),
+              icon: <ProductIcon name={m.product_name} size="sm" />,
               title: m.product_name,
               sub: `${moveLabels[m.move_type] ?? m.move_type} · ${fmtRelative(m.created_at)}`,
               meta: (
@@ -311,7 +315,7 @@ function ListBody({
   rows,
   empty,
 }: {
-  rows: { key: string; href?: string; title: string; sub?: string; meta?: React.ReactNode }[];
+  rows: { key: string; href?: string; icon?: React.ReactNode; title: string; sub?: string; meta?: React.ReactNode }[];
   empty: string;
 }) {
   if (rows.length === 0) {
@@ -322,9 +326,12 @@ function ListBody({
       {rows.map((row) => {
         const inner = (
           <div className="flex items-center justify-between gap-3 px-4 py-2.5">
-            <div className="min-w-0">
-              <p className="truncate text-sm font-bold text-ink-900">{row.title}</p>
-              {row.sub ? <p className="truncate text-xs text-ink-500">{row.sub}</p> : null}
+            <div className="flex items-center gap-3 min-w-0">
+              {row.icon ? <div className="shrink-0">{row.icon}</div> : null}
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-ink-900">{row.title}</p>
+                {row.sub ? <p className="truncate text-xs text-ink-500">{row.sub}</p> : null}
+              </div>
             </div>
             {row.meta ? <div className="shrink-0">{row.meta}</div> : null}
           </div>
