@@ -2,10 +2,11 @@
 export const CATEGORY_ICONS: Record<string, string> = {
   'شيبس ومقرمشات': '/icons/products/chips.svg',
   'عصائر ومشروبات': '/icons/products/juice-box.svg',
-  'مياه': '/icons/products/water-bottle.svg',
-  'بسكويت وويفر': '/icons/products/biscuit.svg',
-  'شوكولاتة وحلويات': '/icons/products/chocolate.svg',
+  'مياه': '/icons/products/water-jana-05l.svg',
+  'بسكويت وويفر': '/icons/products/biscuit-wataniya.svg',
+  'شوكولاتة وحلويات': '/icons/products/choco-galaxy.svg',
   'مواد تموينية': '/icons/products/grocery.svg',
+  'معلبات ومواد غذائية': '/icons/products/grocery.svg',
   'مشروبات غازية': '/icons/products/soda-can.svg',
   'منظفات وورقيات': '/icons/products/cleaner.svg',
 };
@@ -70,82 +71,114 @@ export const CATEGORY_COLORS: Record<string, { bg: string; text: string; ring: s
   'بسكويت وويفر': { bg: '#FEF9C3', text: '#854D0E', ring: '#FDE68A' },
   'شوكولاتة وحلويات': { bg: '#F3E8FF', text: '#6B21A8', ring: '#D8B4FE' },
   'مواد تموينية': { bg: '#EDE9FE', text: '#5B21B6', ring: '#C4B5FD' },
+  'معلبات ومواد غذائية': { bg: '#ECFDF5', text: '#065F46', ring: '#A7F3D0' },
   'مشروبات غازية': { bg: '#FEE2E2', text: '#991B1B', ring: '#FCA5A5' },
   'منظفات وورقيات': { bg: '#D1FAE5', text: '#065F46', ring: '#6EE7B7' },
 };
 
 /**
- * قواعد المطابقة الذكية — تربط كلمات مفتاحية في اسم المنتج بملف SVG المناسب.
+ * قواعد المطابقة الذكية الشاملة — تربط كلمات مفتاحية في اسم المنتج أو الماركة بأيقونة SVG المناسبة
  */
 const PRODUCT_ICON_RULES: Array<{ keywords: string[]; icon: string }> = [
-  // شيبس ومقرمشات
-  { keywords: ['كتشب', 'كشب'], icon: '/icons/products/chips-ketchup.svg' },
-  { keywords: ['ملح', 'سادة'], icon: '/icons/products/chips-salt.svg' },
-  { keywords: ['بوشار', 'فشار', 'popcorn'], icon: '/icons/products/popcorn-senyora.svg' },
-  { keywords: ['شيبس', 'شيبسي', 'مقرمش', 'chips', 'crisp'], icon: '/icons/products/chips.svg' },
-  // عصائر
+  // 1) عصائر ومشروبات
+  { keywords: ['تفاح'], icon: '/icons/products/juice-suntop-apple.svg' },
   { keywords: ['برتقال'], icon: '/icons/products/juice-suntop-orange.svg' },
   { keywords: ['مانجا', 'مانجو'], icon: '/icons/products/juice-suntop-mango.svg' },
-  { keywords: ['عصير', 'juice', 'نكتار', 'سن توب'], icon: '/icons/products/juice-box.svg' },
-  // مياه
-  { keywords: ['1.5', 'كبير'], icon: '/icons/products/water-jana-15l.svg' },
-  { keywords: ['0.5', 'صغير'], icon: '/icons/products/water-jana-05l.svg' },
-  { keywords: ['مياه', 'ماء', 'water', 'جنى'], icon: '/icons/products/water-jana-15l.svg' },
-  // بسكويت
+  { keywords: ['توت', 'فراولة'], icon: '/icons/products/juice-suntop-berry.svg' },
+  { keywords: ['عنب'], icon: '/icons/products/juice-rabie-grape.svg' },
+  { keywords: ['كوكتيل', 'مشكل', 'فواكه', 'جوافة', 'موز', 'أناناس', 'رمان', 'عصير', 'juice', 'نكتار', 'شراب', 'سن توب'], icon: '/icons/products/juice-box.svg' },
+
+  // 2) مياه
+  { keywords: ['أكوافينا', 'aquafina'], icon: '/icons/products/water-aquafina-15l.svg' },
+  { keywords: ['330', '0.33', '250', '200', 'صغير'], icon: '/icons/products/water-jana-05l.svg' },
+  { keywords: ['1.5', 'كبير', 'لتر'], icon: '/icons/products/water-jana-15l.svg' },
+  { keywords: ['مياه', 'ماء', 'ميه', 'water', 'جنى'], icon: '/icons/products/water-jana-05l.svg' },
+
+  // 3) شيبس ومقرمشات
+  { keywords: ['حار', 'فلفل', 'شطة', 'نار'], icon: '/icons/products/chips-spicy.svg' },
+  { keywords: ['كتشب', 'كشب', 'طماطم'], icon: '/icons/products/chips-ketchup.svg' },
+  { keywords: ['ملح', 'سادة', 'خل'], icon: '/icons/products/chips-salt.svg' },
+  { keywords: ['بوشار', 'فشار', 'popcorn'], icon: '/icons/products/popcorn-senyora.svg' },
+  { keywords: ['شيبس', 'شيبسي', 'مقرمش', 'كرات', 'ذرة', 'chips', 'crisp'], icon: '/icons/products/chips.svg' },
+
+  // 4) بسكويت وويفر
+  { keywords: ['فانيلا', 'فانيليا'], icon: '/icons/products/wafer-vanilla.svg' },
   { keywords: ['ويفر', 'wafer', 'gaufrette'], icon: '/icons/products/wafer-alibaba.svg' },
-  { keywords: ['بسكويت', 'بسكوت', 'biscuit', 'cookie'], icon: '/icons/products/biscuit-wataniya.svg' },
-  // شوكولاتة
-  { keywords: ['حلاوة', 'طحينية', 'halva'], icon: '/icons/products/halva-aseel.svg' },
-  { keywords: ['شوكولاتة', 'شوكولا', 'chocolate', 'جالكسي', 'كادبوري', 'كيت كات', 'سنيكرز'], icon: '/icons/products/choco-galaxy.svg' },
-  // مواد تموينية ومواد غذائية
-  { keywords: ['تونة', 'tuna'], icon: '/icons/products/tuna-alali.svg' },
+  { keywords: ['دايجستف', 'digestive'], icon: '/icons/products/biscuit-digestive.svg' },
+  { keywords: ['بسكويت', 'بسكوت', 'شاي', 'مالح', 'biscuit', 'cookie', 'كعك'], icon: '/icons/products/biscuit-wataniya.svg' },
+
+  // 5) شوكولاتة وحلويات
+  { keywords: ['كيت كات', 'kitkat', 'kit kat'], icon: '/icons/products/choco-kitkat.svg' },
+  { keywords: ['سنيكرز', 'snickers'], icon: '/icons/products/choco-snickers.svg' },
+  { keywords: ['تويكس', 'twix'], icon: '/icons/products/choco-twix.svg' },
+  { keywords: ['جالكسي', 'galaxy'], icon: '/icons/products/choco-galaxy.svg' },
+  { keywords: ['شوكولاتة', 'شوكولا', 'شوكولاته', 'chocolate', 'كادبوري', 'نستله', 'مارس'], icon: '/icons/products/choco-galaxy.svg' },
+  { keywords: ['حلاوة', 'طحينية', 'فستق', 'halva'], icon: '/icons/products/halva-aseel.svg' },
+  { keywords: ['علكة', 'مستكة', 'شعراوي', 'gum'], icon: '/icons/products/chocolate.svg' },
+
+  // 6) مواد تموينية ومواد غذائية
+  { keywords: ['تونة', 'tuna', 'سردين'], icon: '/icons/products/tuna-alali.svg' },
   { keywords: ['فول', 'foul'], icon: '/icons/products/foul-durra.svg' },
   { keywords: ['حمص', 'hummus'], icon: '/icons/products/hummus-durra.svg' },
-  { keywords: ['حليب', 'لبن', 'قشطة', 'milk'], icon: '/icons/products/milk-baladna.svg' },
+  { keywords: ['حليب', 'لبن', 'قشطة', 'زبدة', 'milk'], icon: '/icons/products/milk-baladna.svg' },
   { keywords: ['مربى', 'فراولة', 'jam'], icon: '/icons/products/jam-strawberry.svg' },
   { keywords: ['عسل', 'honey'], icon: '/icons/products/honey-jar.svg' },
-  { keywords: ['قهوة', 'بن', 'هيل', 'coffee'], icon: '/icons/products/coffee-cardamom.svg' },
+  { keywords: ['قهوة', 'بن', 'نسكافيه', 'هيل', 'coffee'], icon: '/icons/products/coffee-cardamom.svg' },
   { keywords: ['تمر', 'رطب', 'dates'], icon: '/icons/products/dates-box.svg' },
   { keywords: ['جبنة', 'جبن', 'cheese'], icon: '/icons/products/cheese-white.svg' },
   { keywords: ['رز', 'أرز', 'rice'], icon: '/icons/products/rice-shallal.svg' },
   { keywords: ['سكر', 'sugar'], icon: '/icons/products/sugar-ittihad.svg' },
-  { keywords: ['زيت', 'oil', 'عافية'], icon: '/icons/products/oil-afia.svg' },
-  { keywords: ['معكرونة', 'سباغيتي', 'اسباغيتي', 'مكرونة', 'pasta', 'spaghetti'], icon: '/icons/products/spaghetti-durra.svg' },
-  // مشروبات غازية
+  { keywords: ['زيت زيتون', 'زيتون'], icon: '/icons/products/oil-olive.svg' },
+  { keywords: ['زيت', 'oil', 'عافية', 'دوار الشمس'], icon: '/icons/products/oil-afia.svg' },
+  { keywords: ['معكرونة', 'سباغيتي', 'اسباغيتي', 'مكرونة', 'pasta', 'spaghetti', 'شعرية'], icon: '/icons/products/spaghetti-durra.svg' },
+  { keywords: ['طماطم', 'بندورة', 'صلصة', 'معجون'], icon: '/icons/products/tomato-paste.svg' },
+  { keywords: ['ملح', 'salt'], icon: '/icons/products/salt-safi.svg' },
+  { keywords: ['شاي', 'tea'], icon: '/icons/products/tea-rabie.svg' },
+
+  // 7) مشروبات غازية وطاقة
   { keywords: ['سفن', '7up', 'ليمون'], icon: '/icons/products/7up-can.svg' },
+  { keywords: ['ميرندا', 'mirinda'], icon: '/icons/products/mirinda-orange.svg' },
   { keywords: ['كولا', 'بيبسي', 'غازي', 'pepsi', 'cola'], icon: '/icons/products/pepsi-can.svg' },
-  // منظفات
+  { keywords: ['ريد بول', 'طاقة', 'redbull', 'red bull', 'energy'], icon: '/icons/products/redbull-energy.svg' },
+
+  // 8) منظفات وورقيات
   { keywords: ['مناديل', 'منديل', 'tissue', 'فاين'], icon: '/icons/products/fine-tissues.svg' },
-  { keywords: ['منظف', 'صابون', 'شامبو', 'معقم', 'كلوركس', 'clean', 'soap'], icon: '/icons/products/cleaner.svg' },
+  { keywords: ['منظف', 'صابون', 'شامبو', 'معقم', 'كلوركس', 'clean', 'soap', 'ديتول', 'هاي جين', 'أريال'], icon: '/icons/products/cleaner.svg' },
 ];
 
 /**
- * يحاول إيجاد أيقونة SVG مطابقة لاسم المنتج بصلابة ودقة فائقة.
+ * دالة المطابقة الذكية — تطابق أي اسم منتج أو شركة مع أيقونة SVG حقيقية
  */
-export function matchProductIcon(name: string, brand?: string | null): string | null {
-  const trimmed = name.trim();
+export function matchProductIcon(name: string, brand?: string | null): string {
+  const normalizedName = name.trim().replace(/[أإآ]/g, 'ا');
+  const normalizedBrand = (brand ?? '').trim().replace(/[أإآ]/g, 'ا');
+
   // 1) مطابقة تامة بالاسم المباشر
-  if (EXACT_PRODUCT_ICONS[trimmed]) {
-    return EXACT_PRODUCT_ICONS[trimmed];
+  if (EXACT_PRODUCT_ICONS[name.trim()]) {
+    return EXACT_PRODUCT_ICONS[name.trim()];
   }
 
-  // 2) مطابقة جزئية بالاسم المباشر
+  // 2) مطابقة جزئية في جدول الأصناف التامة
   for (const [exactName, icon] of Object.entries(EXACT_PRODUCT_ICONS)) {
-    if (trimmed.includes(exactName) || exactName.includes(trimmed)) {
+    const cleanExact = exactName.replace(/[أإآ]/g, 'ا');
+    if (normalizedName.includes(cleanExact) || cleanExact.includes(normalizedName)) {
       return icon;
     }
   }
 
-  // 3) مطابقة القواعد والكلمات المفتاحية
-  const haystack = `${name} ${brand ?? ''}`.toLowerCase();
+  // 3) مطابقة الكلمات المفتاحية الذكية
+  const haystack = `${normalizedName} ${normalizedBrand}`.toLowerCase();
   for (const rule of PRODUCT_ICON_RULES) {
     for (const kw of rule.keywords) {
-      if (haystack.includes(kw.toLowerCase())) {
+      const cleanKw = kw.replace(/[أإآ]/g, 'ا').toLowerCase();
+      if (haystack.includes(cleanKw)) {
         return rule.icon;
       }
     }
   }
-  return null;
+
+  // 4) أيقونة افتراضية عالية الجودة كـ SVG دائماً بدل الدائرة
+  return '/icons/products/grocery.svg';
 }
 
 export function matchCategoryIcon(categoryName: string): string | null {
