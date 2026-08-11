@@ -63,7 +63,7 @@ begin
       select jsonb_build_object(
         'value', coalesce(round(sum(stock_units * avg_unit_cost), 3), 0),
         'products_count', count(*) filter (where is_active),
-        'low_stock_count', count(*) filter (where is_active and stock_units <= min_stock_units)
+        'low_stock_count', count(*) filter (where is_active and min_stock_units > 0 and stock_units <= min_stock_units)
       )
       from public.products
     ),
@@ -142,7 +142,7 @@ begin
       select coalesce(jsonb_agg(t), '[]'::jsonb) from (
         select id, name, stock_units, min_stock_units, units_per_carton
         from public.products
-        where is_active and stock_units <= min_stock_units
+        where is_active and min_stock_units > 0 and stock_units <= min_stock_units
         order by (stock_units - min_stock_units) asc limit 10
       ) t
     ),
@@ -787,7 +787,7 @@ begin
 
   return (
     select coalesce(jsonb_agg(t), '[]'::jsonb) from (
-      select p2.id, p2.name, p2.barcode, p2.category_id, p2.brand,
+      select p2.id, p2.name, p2.barcode, p2.category_id, p2.brand, p2.image_url,
         p2.units_per_carton, p2.stock_units, p2.min_stock_units,
         p2.sale_price_carton, p2.sale_price_piece,
         p2.wholesale_price_carton, p2.wholesale_price_piece,
@@ -837,13 +837,13 @@ begin
           where si2.product_id = si.product_id and s2.customer_id = p_customer_id and s2.status = 'completed'
           order by s2.sale_date desc limit 1
         ) as last_purchase,
-        p2.units_per_carton, p2.stock_units,
+        p2.units_per_carton, p2.stock_units, p2.image_url,
         p2.sale_price_carton, p2.sale_price_piece, p2.barcode, p2.is_active
       from public.sale_items si
       join public.sales s on s.id = si.sale_id
       join public.products p2 on p2.id = si.product_id
       where s.customer_id = p_customer_id and s.status = 'completed'
-      group by si.product_id, p2.units_per_carton, p2.stock_units,
+      group by si.product_id, p2.units_per_carton, p2.stock_units, p2.image_url,
         p2.sale_price_carton, p2.sale_price_piece, p2.barcode, p2.is_active
       order by max(s.sale_date) desc, sum(si.qty_units) desc
       limit greatest(p_limit, 1)

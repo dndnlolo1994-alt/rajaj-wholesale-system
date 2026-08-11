@@ -6,6 +6,7 @@ import { Camera, Calculator, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { Field, Input, NumericInput, Select, Textarea } from '@/components/ui/input';
+import { ProductIcon } from '@/components/products/product-icon';
 import { useToast } from '@/components/ui/toast';
 import { ScannerDialog } from '@/components/barcode/scanner-dialog';
 import { parseMoney, parseQty, formatJOD, formatPercent, profitPercentOnCost, marginPercent, round3 } from '@/lib/calc/money';
@@ -35,6 +36,7 @@ export function ProductForm({
   const [sku, setSku] = useState(product?.sku ?? '');
   const [categoryId, setCategoryId] = useState(product?.category_id ?? '');
   const [brand, setBrand] = useState(product?.brand ?? '');
+  const [imageUrl, setImageUrl] = useState(product?.image_url ?? '');
   const [description, setDescription] = useState(product?.description ?? '');
   const [notes, setNotes] = useState(product?.notes ?? '');
   const [upc, setUpc] = useState(product ? String(product.units_per_carton) : '');
@@ -118,7 +120,7 @@ export function ProductForm({
       brand: brand.trim() || null,
       description: description.trim() || null,
       notes: notes.trim() || null,
-      image_url: product?.image_url ?? null,
+      image_url: imageUrl.trim() || null,
       units_per_carton: upcNum,
       purchase_price_carton: parseMoney(purchaseCarton) ?? 0,
       sale_price_carton: saleCartonNum,
@@ -181,6 +183,18 @@ export function ProductForm({
 
           <Field label="الشركة / العلامة">
             <Input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="اختياري" />
+          </Field>
+
+          <Field label="صورة الصنف / SVG" hint="اختياري — اتركه فارغًا ليولّد النظام أيقونة تلقائية">
+            <div className="flex items-center gap-2">
+              <ProductIcon name={name || 'صنف'} brand={brand} imageUrl={imageUrl} size="sm" />
+              <Input
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                dir="ltr"
+                placeholder="data:image/svg+xml... أو رابط صورة"
+              />
+            </div>
           </Field>
 
           <Field label="الوصف" className="sm:col-span-2">

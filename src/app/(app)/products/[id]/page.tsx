@@ -13,6 +13,7 @@ import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { Money, PageHeader, EmptyState } from '@/components/ui/misc';
 import { Badge, StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ProductIcon } from '@/components/products/product-icon';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { Pagination } from '@/components/ui/pagination';
 import { fmtDateShort, fmtDateTime, fmtTime } from '@/lib/format/date';
@@ -54,7 +55,7 @@ export default async function ProductDetailPage({
   const showProfit = canSeeProfit(profile.role);
   const isManager = canManage(profile.role);
   const canEdit = ['owner', 'manager', 'warehouse'].includes(profile.role);
-  const low = Number(product.stock_units) <= Number(product.min_stock_units);
+  const low = Number(product.min_stock_units) > 0 && Number(product.stock_units) <= Number(product.min_stock_units);
   const upc = Math.max(1, product.units_per_carton);
   const avgCost = Number(product.avg_unit_cost);
   const stockValue = Number(product.stock_units) * avgCost;
@@ -62,7 +63,12 @@ export default async function ProductDetailPage({
   return (
     <div className="space-y-4">
       <PageHeader
-        title={product.name}
+        title={
+          <span className="inline-flex items-center gap-3">
+            <ProductIcon name={product.name} brand={product.brand} imageUrl={product.image_url} size="lg" />
+            <span>{product.name}</span>
+          </span>
+        }
         description={product.brand ?? undefined}
         actions={
           <>

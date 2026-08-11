@@ -71,6 +71,7 @@ export interface HeldSalePayload {
   lines: {
     product_id: string;
     name: string;
+    image_url?: string | null;
     unit: 'carton' | 'piece';
     units_per_carton: number;
     qty: number;
@@ -92,7 +93,7 @@ export async function holdSaleAction(payload: HeldSalePayload, label?: string): 
     const { data, error } = await supabase
       .from('held_sales')
       .insert({
-        label: label ?? payload.customer_name ?? 'فاتورة معلّقة',
+        label: label ?? payload.customer_name ?? 'مديون',
         customer_id: payload.customer_id,
         payload: payload as unknown as Record<string, unknown>,
         created_by: user.id,

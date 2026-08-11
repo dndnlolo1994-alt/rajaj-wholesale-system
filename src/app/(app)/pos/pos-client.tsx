@@ -14,6 +14,7 @@ import { Money } from '@/components/ui/misc';
 import { useToast } from '@/components/ui/toast';
 import { ScannerDialog } from '@/components/barcode/scanner-dialog';
 import { InvoicePdfButton } from '@/components/printing/invoice-pdf-button';
+import { ProductIcon } from '@/components/products/product-icon';
 import { CustomerPicker } from './customer-picker';
 import { CustomerFormDialog } from '../customers/customer-form';
 import { PaymentSheet } from './payment-sheet';
@@ -35,6 +36,7 @@ interface CartLine {
   key: string;
   product_id: string;
   name: string;
+  image_url: string | null;
   unit: UnitKind;
   units_per_carton: number;
   qty: number;
@@ -150,6 +152,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
             key,
             product_id: p.id,
             name: p.name,
+            image_url: p.image_url ?? null,
             unit,
             units_per_carton: p.units_per_carton,
             qty,
@@ -314,7 +317,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
     router.refresh();
   };
 
-  // ---------- التعليق ----------
+  // ---------- المديون ----------
   const holdSale = async () => {
     if (lines.length === 0) return;
     const res = await holdSaleAction({
@@ -323,6 +326,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
       lines: lines.map((l) => ({
         product_id: l.product_id,
         name: l.name,
+        image_url: l.image_url ?? null,
         unit: l.unit,
         units_per_carton: l.units_per_carton,
         qty: l.qty,
@@ -334,13 +338,13 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
       notes: null,
     });
     if (res.ok) {
-      success('عُلّقت الفاتورة — يمكنك الرجوع لها لاحقًا');
+      success('انحفظت كمديون — يمكنك الرجوع لها لاحقًا');
       setLines([]);
       setInvoiceDiscount(0);
       setCustomer(null);
       setHeldId(null);
     } else {
-      toastError('تعذر تعليق الفاتورة', res.error.message);
+      toastError('تعذر حفظ المديون', res.error.message);
     }
   };
 
@@ -359,6 +363,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         key: `${l.product_id}:${l.unit}`,
         product_id: l.product_id,
         name: l.name,
+        image_url: l.image_url ?? null,
         unit: l.unit,
         units_per_carton: l.units_per_carton,
         qty: l.qty,
@@ -381,8 +386,9 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
   return (
     <div className="lg:flex lg:gap-4">
       {/* ================= يمين: الأصناف ================= */}
-      <div className="min-w-0 flex-1 space-y-3">
-        {/* العميل + المعلّقة */}
+      {/* مساحة إضافية أسفل القائمة حتى لا يغطي شريط السلة آخر صنف على الجوال */}
+      <div className={`min-w-0 flex-1 space-y-3 ${lines.length > 0 ? 'pb-16 lg:pb-0' : ''}`}>
+        {/* العميل + المديون */}
         <div className="flex items-center gap-2">
           <button
             onClick={openCustomerPicker}
@@ -423,9 +429,9 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
               </Button>
             }
           />
-          <Button variant="outline" onClick={openHeldList} className="shrink-0" title="الفواتير المعلّقة">
+          <Button variant="outline" onClick={openHeldList} className="shrink-0" title="المديون">
             <PauseCircle className="size-4" />
-            <span className="hidden sm:inline">المعلّقة</span>
+            <span className="hidden sm:inline">المديون</span>
           </Button>
         </div>
 
@@ -482,6 +488,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                     addProduct(
                       {
                         id: f.id, name: f.name, barcode: f.barcode, category_id: null, brand: null,
+                        image_url: f.image_url ?? null,
                         units_per_carton: f.units_per_carton, stock_units: f.stock_units, min_stock_units: 0,
                         sale_price_carton: f.sale_price_carton, sale_price_piece: f.sale_price_piece,
                         wholesale_price_carton: null, wholesale_price_piece: null,
@@ -493,7 +500,10 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                   }}
                   className="shrink-0 rounded-lg border border-primary-200 bg-white px-2.5 py-1.5 text-start shadow-sm transition-colors hover:border-primary-400"
                 >
-                  <span className="block max-w-36 truncate text-xs font-bold">{f.name}</span>
+                  <span className="flex max-w-44 items-center gap-2">
+                    <ProductIcon name={f.name} imageUrl={f.image_url} size="sm" />
+                    <span className="block min-w-0 truncate text-xs font-bold">{f.name}</span>
+                  </span>
                   <span className="tnum block text-[10px] text-ink-500" dir="ltr">
                     {f.last_purchase ? `${formatJOD(f.last_purchase.unit_price, { symbol: false })} / ${unitLabel[f.last_purchase.unit]}` : ''}
                   </span>
@@ -506,11 +516,17 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         {/* شبكة الأصناف */}
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
           {products.map((p) => {
-            const low = p.stock_units <= p.min_stock_units;
+            const low = p.min_stock_units > 0 && p.stock_units <= p.min_stock_units;
             const out = p.stock_units <= 0;
             return (
               <div key={p.id} className="flex flex-col rounded-xl border border-ink-200 bg-white p-2.5 shadow-card">
-                <p className="line-clamp-2 min-h-10 text-sm font-bold leading-5">{p.name}</p>
+                <div className="flex items-start gap-2">
+                  <ProductIcon name={p.name} brand={p.brand} imageUrl={p.image_url} size="sm" />
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 min-h-10 text-sm font-bold leading-5">{p.name}</p>
+                    {p.brand ? <p className="truncate text-[10px] font-bold text-ink-400">{p.brand}</p> : null}
+                  </div>
+                </div>
                 <p className={`mt-1 text-[11px] font-bold ${out ? 'text-red-600' : low ? 'text-amber-600' : 'text-ink-500'}`}>
                   {out ? 'نفد المخزون' : formatQty(p.stock_units, p.units_per_carton)}
                 </p>
@@ -573,7 +589,7 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
 
       {/* ================= شريط السلة السفلي (جوال) ================= */}
       {lines.length > 0 ? (
-        <div className="fixed inset-x-0 bottom-16 z-30 px-3 pb-1 lg:hidden">
+        <div className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 px-3 pb-1 lg:hidden">
           <button
             onClick={() => setCartOpen(true)}
             className="flex w-full items-center justify-between rounded-2xl bg-primary-800 px-4 py-3 text-white shadow-pop"
@@ -643,16 +659,16 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
         loading={submitting}
       />
 
-      {/* الفواتير المعلّقة */}
-      <Dialog open={heldOpen} onClose={() => setHeldOpen(false)} title="الفواتير المعلّقة">
+      {/* المديون */}
+      <Dialog open={heldOpen} onClose={() => setHeldOpen(false)} title="المديون">
         {heldList.length === 0 ? (
-          <p className="py-8 text-center text-sm text-ink-500">لا توجد فواتير معلّقة</p>
+          <p className="py-8 text-center text-sm text-ink-500">لا يوجد مديون محفوظ</p>
         ) : (
           <div className="space-y-2">
             {heldList.map((h) => (
               <div key={h.id} className="flex items-center justify-between gap-2 rounded-xl border border-ink-200 p-3">
                 <button onClick={() => resumeHeld(h)} className="min-w-0 flex-1 text-start">
-                  <p className="truncate text-sm font-bold">{h.label ?? 'فاتورة معلّقة'}</p>
+                  <p className="truncate text-sm font-bold">{h.label ?? 'مديون'}</p>
                   <p className="text-xs text-ink-500">
                     {h.payload.lines.length} صنف — {fmtRelative(h.created_at)}
                   </p>
@@ -775,7 +791,7 @@ function CartPanel({
           {lines.length > 0 ? (
             <button onClick={onHold} className="flex items-center gap-1 text-xs font-bold text-amber-700 hover:underline">
               <PauseCircle className="size-4" />
-              تعليق
+              مديون
             </button>
           ) : null}
         </div>
@@ -866,12 +882,15 @@ function CartLineRow({
   return (
     <div className={`rounded-xl border p-2.5 ${hasIssue ? 'border-red-300 bg-red-50/50' : 'border-ink-200 bg-white'}`}>
       <div className="flex items-start justify-between gap-2">
-        <button onClick={() => setExpanded(!expanded)} className="min-w-0 flex-1 text-start">
-          <p className="truncate text-sm font-bold">{line.name}</p>
-          <p className="tnum text-xs text-ink-500" dir="ltr">
-            {formatJOD(line.unit_price, { symbol: false })} × {line.qty} {unitLabel[line.unit]}
-            {line.discount > 0 ? ` − ${formatJOD(line.discount, { symbol: false })}` : ''}
-          </p>
+        <button onClick={() => setExpanded(!expanded)} className="flex min-w-0 flex-1 items-start gap-2 text-start">
+          <ProductIcon name={line.name} imageUrl={line.image_url} size="sm" />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-bold">{line.name}</span>
+            <span className="tnum block text-xs text-ink-500" dir="ltr">
+              {formatJOD(line.unit_price, { symbol: false })} × {line.qty} {unitLabel[line.unit]}
+              {line.discount > 0 ? ` − ${formatJOD(line.discount, { symbol: false })}` : ''}
+            </span>
+          </span>
         </button>
         <Money value={lineTotal} className="text-sm" />
       </div>

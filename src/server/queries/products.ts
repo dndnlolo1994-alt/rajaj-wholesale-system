@@ -64,7 +64,7 @@ export async function listProducts(params: ProductListParams): Promise<{ rows: P
       if (chunk.length < 1000) break;
     }
     const low = all
-      .filter((p) => Number(p.stock_units) <= Number(p.min_stock_units))
+      .filter((p) => Number(p.min_stock_units) > 0 && Number(p.stock_units) <= Number(p.min_stock_units))
       .sort((a, b) => (a.stock_units - a.min_stock_units) - (b.stock_units - b.min_stock_units));
     return { rows: low.slice((page - 1) * pageSize, page * pageSize), total: low.length };
   }
@@ -214,7 +214,7 @@ export async function getStockOverview(): Promise<StockOverview> {
   }
   const totalValue = rows.reduce((a, r) => a + Number(r.stock_units) * Number(r.avg_unit_cost), 0);
   const lowList = rows
-    .filter((r) => Number(r.stock_units) <= Number(r.min_stock_units))
+    .filter((r) => Number(r.min_stock_units) > 0 && Number(r.stock_units) <= Number(r.min_stock_units))
     .sort((a, b) => (a.stock_units - a.min_stock_units) - (b.stock_units - b.min_stock_units));
   return { totalValue, activeCount: rows.length, lowCount: lowList.length, lowList };
 }

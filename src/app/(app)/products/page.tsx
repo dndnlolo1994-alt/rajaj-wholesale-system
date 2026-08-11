@@ -10,6 +10,7 @@ import { SearchInput } from '@/components/ui/search-input';
 import { Pagination } from '@/components/ui/pagination';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { Button } from '@/components/ui/button';
+import { ProductIcon } from '@/components/products/product-icon';
 import { formatQty } from '@/lib/calc/units';
 import { CategoriesDialog } from './categories-dialog';
 
@@ -101,14 +102,19 @@ export default async function ProductsPage({
                 </thead>
                 <tbody className="divide-y divide-ink-100">
                   {rows.map((p) => {
-                    const low = Number(p.stock_units) <= Number(p.min_stock_units);
+                    const low = Number(p.min_stock_units) > 0 && Number(p.stock_units) <= Number(p.min_stock_units);
                     return (
                       <tr key={p.id} className="transition-colors hover:bg-primary-50/40">
                         <td className="px-4 py-3">
-                          <Link href={`/products/${p.id}`} className="font-bold text-primary-700 hover:underline">
-                            {p.name}
-                          </Link>
-                          {p.brand ? <p className="text-xs text-ink-500">{p.brand}</p> : null}
+                          <div className="flex items-center gap-2.5">
+                            <ProductIcon name={p.name} brand={p.brand} imageUrl={p.image_url} size="sm" />
+                            <div className="min-w-0">
+                              <Link href={`/products/${p.id}`} className="font-bold text-primary-700 hover:underline">
+                                {p.name}
+                              </Link>
+                              {p.brand ? <p className="text-xs text-ink-500">{p.brand}</p> : null}
+                            </div>
+                          </div>
                         </td>
                         <td className="px-4 py-3">
                           {p.barcode ? (
@@ -138,11 +144,17 @@ export default async function ProductsPage({
             {/* بطاقات الجوال */}
             <div className="divide-y divide-ink-100 lg:hidden">
               {rows.map((p) => {
-                const low = Number(p.stock_units) <= Number(p.min_stock_units);
+                const low = Number(p.min_stock_units) > 0 && Number(p.stock_units) <= Number(p.min_stock_units);
                 return (
                   <Link key={p.id} href={`/products/${p.id}`} className="block p-3.5 transition-colors hover:bg-primary-50/40">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-extrabold">{p.name}</p>
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <ProductIcon name={p.name} brand={p.brand} imageUrl={p.image_url} size="sm" />
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-extrabold">{p.name}</p>
+                          {p.brand ? <p className="truncate text-xs text-ink-500">{p.brand}</p> : null}
+                        </div>
+                      </div>
                       <Badge tone={p.is_active ? 'success' : 'muted'}>{p.is_active ? 'فعال' : 'موقوف'}</Badge>
                     </div>
                     <div className="mt-1 flex items-center justify-between gap-2 text-xs text-ink-500">

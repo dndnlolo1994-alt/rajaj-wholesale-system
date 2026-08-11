@@ -358,7 +358,7 @@ begin
   values (p_product_id, p_move_type, p_qty_change, v_new_stock,
           coalesce(p_recost_unit_cost, v_avg), p_ref_table, p_ref_id, p_notes, p_actor);
 
-  if v_new_stock <= v_min then
+  if v_min > 0 and v_new_stock <= v_min then
     perform app.notify_once(
       'low_stock:' || p_product_id::text,
       'low_stock', 'warning',

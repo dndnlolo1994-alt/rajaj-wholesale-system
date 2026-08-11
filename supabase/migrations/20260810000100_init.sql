@@ -99,7 +99,7 @@ create unique index products_barcode_key on public.products (barcode)
 create index products_name_trgm on public.products using gin (name extensions.gin_trgm_ops);
 create index products_category_idx on public.products (category_id);
 create index products_active_idx on public.products (is_active);
-create index products_low_stock_idx on public.products (id) where stock_units <= min_stock_units;
+create index products_low_stock_idx on public.products (id) where min_stock_units > 0 and stock_units <= min_stock_units;
 
 create table public.customers (
   id uuid primary key default gen_random_uuid(),

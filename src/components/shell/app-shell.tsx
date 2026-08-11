@@ -147,10 +147,13 @@ export function AppShell({ profile, businessName, ownerPhotoUrl, unreadCount, ch
           </div>
         </header>
 
-        <main className="animate-pop mx-auto w-full max-w-7xl flex-1 px-4 pb-24 pt-4 lg:px-6 lg:pb-10 lg:pt-5">{children}</main>
+        <main className="animate-pop mx-auto w-full max-w-7xl flex-1 px-4 pb-[calc(var(--bottom-nav-h)+2rem)] pt-4 lg:px-6 lg:pb-10 lg:pt-5">{children}</main>
       </div>
 
-      {/* ===== شريط الجوال السفلي ===== */}
+      {/* ===== شريط الجوال السفلي =====
+          ارتفاع هذا الشريط معرّف في globals.css كـ --bottom-nav-h، وكل عنصر
+          ثابت فوقه (شريط السلة، التنبيهات، حشوة main) يقيس منه. إذا تغيّرت
+          الحشوة أو حجم زر البيع المركزي، حدّث المتغيّر. */}
       <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-white/80 bg-white/88 shadow-[0_-12px_32px_-24px_rgba(5,42,36,.5)] backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:hidden">
         <div className="grid grid-cols-5">
           {bottomItems.slice(0, 2).map((item) => (

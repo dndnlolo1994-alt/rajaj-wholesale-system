@@ -9,6 +9,7 @@ export interface PosProduct {
   barcode: string | null;
   category_id: string | null;
   brand: string | null;
+  image_url: string | null;
   units_per_carton: number;
   stock_units: number;
   min_stock_units: number;
@@ -68,6 +69,7 @@ export interface CustomerFavorite {
   sale_price_carton: number;
   sale_price_piece: number;
   barcode: string | null;
+  image_url: string | null;
   is_active: boolean;
 }
 
