@@ -55,6 +55,7 @@ declare
   v_invoice_no text;
   v_method public.payment_method := nullif(p->>'payment_method','')::public.payment_method;
   v_cash_customer_name text := nullif(left(trim(coalesce(p->>'cash_customer_name', '')), 150), '');
+  v_auto_customer boolean := false;
   v_notes text := nullif(p->>'notes', '');
   v_remaining_f bigint;
   v_new_balance numeric;
@@ -174,8 +175,24 @@ begin
   if v_paid_f > v_total_f then
     perform app.err('PAID_EXCEEDS_TOTAL', 'المبلغ المدفوع أكبر من إجمالي الفاتورة.');
   end if;
+  -- ذمم أو متبقٍ بدون حساب عميل: نفتح حسابًا باسم الزبون تلقائيًا حتى لا يضيع الدين
   if v_customer_id is null and v_paid_f <> v_total_f then
-    perform app.err('CASH_SALE_MUST_BE_PAID', 'البيع النقدي بدون عميل مسجّل يجب أن يُدفع بالكامل.');
+    if v_cash_customer_name is null then
+      perform app.err('CASH_SALE_NEEDS_NAME',
+        'اكتب اسم العميل حتى يُسجّل الباقي على حسابه، أو اجعل الفاتورة مدفوعة بالكامل.');
+    end if;
+    select * into v_customer from public.customers
+      where is_active and lower(btrim(name)) = lower(v_cash_customer_name)
+      order by created_at limit 1;
+    if v_customer.id is null then
+      insert into public.customers (name) values (v_cash_customer_name)
+      returning * into v_customer;
+      v_auto_customer := true;
+      perform app.audit(v_actor.id, 'customer.create', 'customers', v_customer.id::text, null,
+        jsonb_build_object('name', v_customer.name, 'source', 'pos_debt'), v_ip);
+    end if;
+    v_customer_id := v_customer.id;
+    v_cash_customer_name := null;
   end if;
   if v_paid_f > 0 and v_method is null then
     v_method := coalesce(nullif(app.setting_text('sales','default_payment_method','cash'),'')::public.payment_method, 'cash');
@@ -280,6 +297,9 @@ begin
     'remaining', app.from_fils(v_remaining_f),
     'profit', app.from_fils(v_total_f - v_cost_total_f),
     'customer_balance', v_new_balance,
+    'customer_id', v_customer_id,
+    'customer_name', v_customer.name,
+    'auto_customer', v_auto_customer,
     'warnings', v_warnings
   );
 end;

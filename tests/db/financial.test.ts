@@ -150,7 +150,7 @@ describe('البيع: وحدات مزدوجة، خصومات، تكلفة مجم
     expect(pay.direction).toBe('in');
   });
 
-  it('يمنع البيع فوق المخزون ويمنع البيع النقدي غير المدفوع', async () => {
+  it('يمنع البيع فوق المخزون ويمنع الذمم بدون اسم عميل', async () => {
     await h.rpcFail(
       'create_sale',
       { p: { customer_id: customerId, paid: 0, items: [{ product_id: productA, unit: 'carton', qty: 100, unit_price: 10 }] } },
@@ -159,8 +159,57 @@ describe('البيع: وحدات مزدوجة، خصومات، تكلفة مجم
     await h.rpcFail(
       'create_sale',
       { p: { paid: 5, items: [{ product_id: productA, unit: 'carton', qty: 1, unit_price: 10 }] } },
-      'CASH_SALE_MUST_BE_PAID',
+      'CASH_SALE_NEEDS_NAME',
     );
+  });
+
+  it('البيع بذمم لزبون بلا حساب يفتح له حسابًا ويعيد استخدامه', async () => {
+    // صنف خاص بهذا الاختبار حتى لا يتأثر مخزون بقية الاختبارات
+    const p = await h.one<{ id: string }>(
+      `insert into products (name, category_id, units_per_carton, sale_price_carton, sale_price_piece)
+       values ('بسكويت اختبار الذمم', $1, 10, 10.000, 1.000) returning id`,
+      [categoryId],
+    );
+    await h.rpc('create_purchase', {
+      p: {
+        supplier_id: supplierId,
+        paid: 0,
+        items: [{ product_id: p.id, unit: 'carton', qty: 5, unit_cost: 6 }],
+      },
+    });
+
+    const line = { product_id: p.id, unit: 'carton', qty: 1, unit_price: 10 };
+
+    const first = await h.rpc('create_sale', { p: { paid: 0, cash_customer_name: 'أبو زياد', items: [line] } });
+    expect(first.auto_customer).toBe(true);
+    expect(first.customer_name).toBe('أبو زياد');
+    expect(n(first.remaining)).toBe(10);
+
+    // الدين انسجّل على حساب فعلي، مش على فاتورة سايبة بلا صاحب
+    const sale1 = await h.one(`select customer_id, cash_customer_name from sales where id = $1`, [first.id]);
+    expect(sale1.customer_id).toBe(first.customer_id);
+    expect(sale1.cash_customer_name).toBeNull();
+
+    // نفس الاسم (مع فراغات) لازم يرجع لنفس الحساب ويراكم الرصيد
+    const second = await h.rpc('create_sale', {
+      p: { paid: 4, payment_method: 'cash', cash_customer_name: '  أبو زياد  ', items: [line] },
+    });
+    expect(second.auto_customer).toBe(false);
+    expect(second.customer_id).toBe(first.customer_id);
+    expect(n(second.customer_balance)).toBe(16); // 10 + (10 − 4)
+
+    // المدفوع بالكامل يضل بيع نقدي بدون فتح حساب
+    const cash = await h.rpc('create_sale', {
+      p: { paid: 10, payment_method: 'cash', cash_customer_name: 'زبون مارّ', items: [line] },
+    });
+    const sale3 = await h.one(`select customer_id, cash_customer_name from sales where id = $1`, [cash.id]);
+    expect(sale3.customer_id).toBeNull();
+    expect(sale3.cash_customer_name).toBe('زبون مارّ');
+    const passing = await h.q(`select id from customers where name = 'زبون مارّ'`);
+    expect(passing).toHaveLength(0);
+
+    // تنظيف: نوقف الصنف حتى لا يدخل في جلسات الجرد اللاحقة
+    await h.q(`update products set is_active = false where id = $1`, [p.id]);
   });
 
   it('إعداد المخزون السالب يسمح بالبيع تحت الصفر ثم الإلغاء يعيده', async () => {

@@ -40,6 +40,9 @@ yarn-error.log*
 /backups
 /tmp
 
+# local agent scratch
+/.codex-local
+
 # vercel
 .vercel
 public/fonts/report-*.woff

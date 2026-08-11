@@ -14,6 +14,9 @@ export interface SaleCreateResult {
   remaining: number;
   profit: number;
   customer_balance: number | null;
+  customer_id: string | null;
+  customer_name: string | null;
+  auto_customer: boolean;
   warnings: { code: string; message: string }[];
 }
 
@@ -30,6 +33,8 @@ export async function createSaleAction(input: SaleInput): Promise<ActionResult<S
     if (error) return actionErr(error);
     revalidatePath('/dashboard');
     revalidatePath('/sales');
+    revalidatePath('/debts');
+    revalidatePath('/customers');
     return actionOk(data as SaleCreateResult);
   } catch (e) {
     return actionErr(e);

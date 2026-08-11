@@ -683,9 +683,14 @@ export function PosClient({ categories, allowNegativeStock, defaultMethod, print
                 {formatJOD(result.total)}
               </p>
               {result.remaining > 0 ? (
-                <p className="mt-1 text-sm font-bold text-amber-700">
-                  المتبقي على العميل: {formatJOD(result.remaining)}
-                </p>
+                <>
+                  <p className="mt-1 text-sm font-bold text-amber-700">
+                    المتبقي على {result.customer_name ?? 'العميل'}: {formatJOD(result.remaining)}
+                  </p>
+                  <p className="mt-1 text-xs font-bold text-amber-700">
+                    {result.auto_customer ? 'تم فتح حساب باسمه، والدين ظاهر في صفحة الديون.' : 'الدين مسجّل في صفحة الديون.'}
+                  </p>
+                </>
               ) : (
                 <p className="mt-1 text-sm font-bold text-emerald-700">مدفوعة بالكامل</p>
               )}
