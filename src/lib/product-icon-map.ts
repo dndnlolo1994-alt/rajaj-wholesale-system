@@ -97,7 +97,16 @@ const PRODUCT_ICON_RULES: Array<{ keywords: string[]; icon: string }> = [
   // شوكولاتة
   { keywords: ['حلاوة', 'طحينية', 'halva'], icon: '/icons/products/halva-aseel.svg' },
   { keywords: ['شوكولاتة', 'شوكولا', 'chocolate', 'جالكسي', 'كادبوري', 'كيت كات', 'سنيكرز'], icon: '/icons/products/choco-galaxy.svg' },
-  // مواد تموينية
+  // مواد تموينية ومواد غذائية
+  { keywords: ['تونة', 'tuna'], icon: '/icons/products/tuna-alali.svg' },
+  { keywords: ['فول', 'foul'], icon: '/icons/products/foul-durra.svg' },
+  { keywords: ['حمص', 'hummus'], icon: '/icons/products/hummus-durra.svg' },
+  { keywords: ['حليب', 'لبن', 'قشطة', 'milk'], icon: '/icons/products/milk-baladna.svg' },
+  { keywords: ['مربى', 'فراولة', 'jam'], icon: '/icons/products/jam-strawberry.svg' },
+  { keywords: ['عسل', 'honey'], icon: '/icons/products/honey-jar.svg' },
+  { keywords: ['قهوة', 'بن', 'هيل', 'coffee'], icon: '/icons/products/coffee-cardamom.svg' },
+  { keywords: ['تمر', 'رطب', 'dates'], icon: '/icons/products/dates-box.svg' },
+  { keywords: ['جبنة', 'جبن', 'cheese'], icon: '/icons/products/cheese-white.svg' },
   { keywords: ['رز', 'أرز', 'rice'], icon: '/icons/products/rice-shallal.svg' },
   { keywords: ['سكر', 'sugar'], icon: '/icons/products/sugar-ittihad.svg' },
   { keywords: ['زيت', 'oil', 'عافية'], icon: '/icons/products/oil-afia.svg' },

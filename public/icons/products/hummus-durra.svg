@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Hummus Can -->
+  <rect x="16" y="16" width="32" height="34" rx="3" fill="#15803D"/>
+  <ellipse cx="32" cy="16" rx="16" ry="3" fill="#E5E7EB"/>
+  <rect x="16" y="24" width="32" height="16" fill="#FEF08A"/>
+  <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#15803D">الدرة</text>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="800" fill="#78350F">حمص حب 400غم</text>
+  <ellipse cx="32" cy="56" rx="12" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

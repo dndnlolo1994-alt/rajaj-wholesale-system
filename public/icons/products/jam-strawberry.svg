@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Jar -->
+  <path d="M20 22c-2 2-3 4-3 8v16c0 3 2 4 4 4h22c2 0 4-1 4-4V30c0-4-1-6-3-8l-1-2V14H21v8l-1 2z" fill="#EF4444"/>
+  <rect x="20" y="8" width="24" height="6" rx="2" fill="#DC2626"/>
+  <rect x="18" y="28" width="28" height="12" rx="2" fill="#FFFFFF"/>
+  <text x="32" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="900" fill="#DC2626">مربى فراولة 🍓</text>
+  <ellipse cx="32" cy="56" rx="14" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

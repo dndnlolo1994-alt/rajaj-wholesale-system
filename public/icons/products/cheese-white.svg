@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="12" y="20" width="40" height="26" rx="3" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+  <rect x="12" y="20" width="40" height="8" rx="2" fill="#3B82F6"/>
+  <text x="32" y="26" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="900" fill="#FFFFFF">جبنة مثلثات / بيضاء</text>
+  <path d="M20 34l8-6 8 6h-16z" fill="#FEF08A" stroke="#FACC15" stroke-width="0.8"/>
+  <path d="M36 34l8-6 8 6h-16z" fill="#FEF08A" stroke="#FACC15" stroke-width="0.8"/>
+  <ellipse cx="32" cy="54" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="12" y="18" width="40" height="28" rx="3" fill="#D97706"/>
+  <rect x="16" y="22" width="32" height="20" rx="2" fill="#FEF08A"/>
+  <ellipse cx="26" cy="30" rx="4" ry="2.5" fill="#78350F"/>
+  <ellipse cx="38" cy="30" rx="4" ry="2.5" fill="#78350F"/>
+  <text x="32" y="39" text-anchor="middle" font-family="Arial, sans-serif" font-size="4.5" font-weight="900" fill="#78350F">تمر مجهول فاخر 🌴</text>
+  <ellipse cx="32" cy="52" rx="16" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>

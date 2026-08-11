@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="14" y="16" width="36" height="34" rx="3" fill="#78350F"/>
+  <rect x="18" y="20" width="28" height="26" rx="2" fill="#FEF08A"/>
+  <text x="32" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="5" font-weight="900" fill="#78350F">قهوة عربية ☕</text>
+  <text x="32" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" font-weight="800" fill="#78350F">محمصة بالهيل</text>
+  <ellipse cx="32" cy="54" rx="14" ry="2" fill="rgba(0,0,0,0.1)"/>
+</svg>
